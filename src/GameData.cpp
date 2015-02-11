@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include "GameData.h"
 #include "Engine.h"
 
@@ -35,7 +37,20 @@ GameData::PlayerShoots(const float angle_to_mouse){
 
 void
 GameData::Update(){
-    for(auto &o : projectiles_){
-        o.Update();
+    static int i = 0;
+    for(auto o = projectiles_.begin() ; o != projectiles_.end() ; ++o ){
+        /*if(o->IsDead()){
+            projectiles_.erase(o);
+            ++o;
+        } else {
+            o->Update();
+            ++o;
+        }*/
+
+        if(o->Update()){
+            o = projectiles_.erase(o);
+        }
+
+
     }
 }

@@ -11,7 +11,7 @@ class ConcreteObject
         virtual ~ConcreteObject();
         void Move(const sf::Vector2f& movement);
         inline sf::Vector2f GetPosition() const{
-            bbox_.GetPosition();
+            return bbox_.GetPosition();
         }
     protected:
         Bbox bbox_;

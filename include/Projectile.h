@@ -12,12 +12,18 @@ class Projectile : public sf::Drawable, public ConcreteObject
         virtual ~Projectile();
         virtual void draw(sf::RenderTarget& target,
                           sf::RenderStates states) const override;
-        void Update();
+        bool Update();
+
+        inline  bool IsDead() const{
+            return dead_;
+        }
     protected:
     private:
         float distance_travelled_;
         float max_distance_;
         float angle_;
+        bool dead_;
+
 };
 
 #endif // PROJECTILE_H
