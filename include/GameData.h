@@ -7,7 +7,11 @@
 #include "InputEnum.h"
 #include "Player.h"
 #include "Projectile.h"
+#include "Ground.h"
+#include "Globals.h"
 
+
+class Wall;
 class Engine;
 class GameData
 {
@@ -18,7 +22,15 @@ class GameData
                           std::array<bool, kInput_Count> last_keys_down);
         void PlayerShoots(const float angle_to_mouse);
         void Update();
+        void CreateMapGridObject(const eObjectType type,
+                                 const sf::Vector2u& tile_position);
 
+
+
+        inline void ToggleLevelEditorMode(){
+            game_state_ = kGameState_Editor?    kGameState_Playing :
+                                                kGameState_Editor;
+        }
 
         //Accessors:
         inline sf::Vector2u GetMapSizeInTiles() const{
@@ -40,6 +52,20 @@ class GameData
         inline std::list<Projectile>& GetProjectiles(){
             return projectiles_;
         }
+        inline std::vector<Wall*>& GetWalls(){
+            return wall_map_;
+        }
+        inline std::vector<Ground*>& GetGround(){
+            return ground_map_;
+        }
+
+        inline int GetTotalTiles() const {
+            return total_tiles_;
+        }
+
+        inline eGameState GetGameState() const {
+            return game_state_;
+        }
 
     protected:
     private:
@@ -49,7 +75,16 @@ class GameData
         Engine& engine_;
         sf::Vector2u map_size_pixels_;
         std::list<Projectile> projectiles_;
+        std::vector<Wall*> wall_map_;
+
+        //the same ground type will point to the same object
+        std::vector<Ground*> ground_map_;
         Player player_;
+        int total_tiles_;
+        eGameState game_state_;
+
+        Ground ground_grass_model;
+        Ground ground_dirt_model;
 
 };
 

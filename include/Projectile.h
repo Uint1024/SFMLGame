@@ -19,10 +19,12 @@ class Projectile : public sf::Drawable, public ConcreteObject
         }
     protected:
     private:
+         float angle_;
+         bool dead_;
         float distance_travelled_;
         float max_distance_;
-        float angle_;
-        bool dead_;
+
+
 
 };
 

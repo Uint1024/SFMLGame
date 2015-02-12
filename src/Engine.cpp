@@ -7,6 +7,10 @@ Engine::Engine(const sf::VideoMode video_mode, const char* window_name) :
 {
     window_.setVerticalSyncEnabled(true);
     window_.setView(camera_);
+    objects_colors_[kTexture_Ground_Dirt] =  sf::Color{96,27,26};
+    objects_colors_[kTexture_Ground_Grass] =  sf::Color{96,27,180};
+    objects_colors_[kTexture_Ground_Cement] =  sf::Color{100,100,100};
+    objects_colors_[kTexture_Ground_BlueCarpet] =  sf::Color{30,200,36};
 }
 
 Engine::~Engine()
@@ -39,6 +43,33 @@ Engine::Render(GameData& game_data){
         window_.draw(line, 2, sf::Lines);
     }
     auto& projectiles = game_data.GetProjectiles();
+    auto& walls = game_data.GetWalls();
+    auto& ground = game_data.GetGround();
+
+    int total_tiles = game_data.GetTotalTiles();
+    sf::RectangleShape shape;
+    shape.setSize(sf::Vector2f{static_cast<float>(g_tile_size.x),
+                  static_cast<float>(g_tile_size.y)});
+
+    int x, y = 0;
+    for(int i = 0 ; i < total_tiles ; i++, x++){
+        if(walls[i]){
+            //window_.draw(*walls[i]);
+        }
+
+        if(ground[i]){
+                std::cout << x * g_tile_size.x << std::endl;
+            shape.setPosition(sf::Vector2f{static_cast<float>(x * g_tile_size.x),
+                              static_cast<float>(y * g_tile_size.y)});
+            shape.setFillColor(objects_colors_[ground[i]->GetTextureId()]);
+            window_.draw(shape);
+        }
+
+        if(x == game_data.GetMapSizeInTiles().x){
+            x = 0;
+            ++y;
+        }
+    }
 
     for(auto &o : projectiles){
         window_.draw(o);

@@ -27,6 +27,7 @@ class Engine
     private:
         sf::RenderWindow window_;
         sf::View camera_;
+        sf::Color objects_colors_[kObject_Count];
 };
 
 #endif // ENGINE_H
