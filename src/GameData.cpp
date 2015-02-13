@@ -7,6 +7,10 @@
 #include "ControlsPlayer.h"
 #include "GraphicsVisible.h"
 #include "ControlsLevelEditor.h"
+#include "ControlsComponent.h"
+#include "HealthComponent.h"
+#include "GraphicsComponent.h"
+#include "PhysicsComponent.h"
 #include "ControlsAI.h"
 
 

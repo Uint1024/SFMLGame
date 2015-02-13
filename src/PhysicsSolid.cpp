@@ -29,7 +29,6 @@ PhysicsSolid::Update(GameObject* object,
         std::vector<GameObject*> walls_map = game_data.GetWalls();
         Bbox temp_bbox = object->GetBbox();
         temp_bbox.Move(movement);
-        std::cout << movement.x << std::endl;
 
         std::array<Bbox*, kDirection_Count> collisions_in_4_directions{nullptr};
         std::array<int, kDirection_Count> nb_of_collisions_in_4_directions{0};

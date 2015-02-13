@@ -99,7 +99,6 @@ Bbox::CheckFutureCollision(sf::Vector2f movement,
           future_bbox.down_ > other_bbox.up_ &&
           future_bbox.up_ < other_bbox.down_)
     {
-        std::cout << "huuh" << std::endl;
         direction_of_collision = kDirection_Left;
         return true;
     }

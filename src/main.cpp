@@ -7,6 +7,7 @@
 
 sf::Vector2f g_tile_size{64,64};
 float g_delta_time = 0.0f;
+float PI = 3.14;
 eGameState g_game_state = kGameState_Playing;
 int main(){
 

@@ -3,11 +3,11 @@
 #include "Globals.h"
 #include <SFML/Graphics/Transformable.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
-#include "ControlsComponent.h"
 #include "Bbox.h"
+#include "ControlsComponent.h"
 
 
-
+class HealthComponent;
 class PhysicsComponent;
 class GraphicsComponent;
 class Engine;
@@ -35,6 +35,7 @@ class GameObject : public sf::Transformable
         bool Update(Engine& engine, GameData& game_data);
         void Move(const sf::Vector2f& movement);
         void MoveTo(const sf::Vector2f& position);
+        //void SendMessage();
 
         //Accessors
         inline eObjectType GetType() const{
@@ -69,6 +70,7 @@ class GameObject : public sf::Transformable
         PhysicsComponent* physics_;
         GraphicsComponent* graphics_;
         ControlsComponent* controls_;
+        HealthComponent* health_;
         bool alive_;
 
 };

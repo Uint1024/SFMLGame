@@ -15,4 +15,6 @@ float PythagorasDistance(sf::Vector2f point){
             point.y * point.y);
 }
 
+extern const float PI;
+
 #endif // MATH_H

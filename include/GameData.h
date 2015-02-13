@@ -50,6 +50,10 @@ class GameData
         inline std::vector<Ground*>& GetGround(){
             return ground_map_;
         }
+        inline auto& GetNpcs(){
+            return npcs_;
+        }
+       
 
         inline int GetTotalTiles() const {
             return total_tiles_;
