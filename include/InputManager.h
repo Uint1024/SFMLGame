@@ -5,24 +5,51 @@
 #include <SFML/Window/Keyboard.hpp>
 #include "InputEnum.h"
 #include "Globals.h"
-#include "Player.h"
-
 class Engine;
 class GameData;
 
 class InputManager
 {
     public:
-        InputManager(Engine* engine, GameData* game_data);
+        InputManager();
         ~InputManager();
-        int PollEvents();
-        void EditLevel();
-        void Play();
+        int PollEvents(Engine& engine, GameData& game_data);
+        void EditLevel(GameData& game_data);
+        void Play(GameData& game_data);
+        float GetAngleToMouse(const sf::Vector2f& object_pos);
+
+        //Accessors:
+
+        inline std::array<bool, kInput_Count>& GetKeysDown(){
+            return keys_down_;
+        };
+
+        inline std::array<bool, kInput_Count>& GetLastKeysDown(){
+            return last_keys_down_;
+        };
+
+        inline sf::Vector2f GetMousePositionInWorldInPixels(){
+            return mouse_position_world_;
+        };
+
+        inline sf::Vector2u GetMouseTilePositionInTiles(){
+            return mouse_tile_position_in_tiles_;
+        };
+
+        inline sf::Vector2u GetMouseTilePositionInPixels(){
+            return mouse_tile_position_in_pixels_;
+        };
+
+        inline int GetMouseVectorMapPosition(const sf::Vector2u map_size) const{
+            return mouse_tile_position_in_tiles_.x +
+                    mouse_tile_position_in_tiles_.y *
+                    map_size.y;
+        }
+
+
+
     protected:
     private:
-        Engine* engine_;
-        GameData* game_data_;
-        Player& player_;
         sf::Vector2f mouse_position_world_;
         sf::Vector2u mouse_tile_position_in_tiles_;
         sf::Vector2u mouse_tile_position_in_pixels_;

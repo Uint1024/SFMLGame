@@ -1,8 +1,6 @@
 #include "ConcreteObject.h"
 
-ConcreteObject::ConcreteObject(const sf::Vector2f& position,
-                               const sf::Vector2u& dimensions) :
-    bbox_(position, dimensions)
+ConcreteObject::ConcreteObject()
 {
     //ctor
 }

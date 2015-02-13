@@ -6,8 +6,7 @@
 class ConcreteObject
 {
     public:
-        ConcreteObject(const sf::Vector2f& movement,
-                  const sf::Vector2u& dimensions);
+        ConcreteObject();
         virtual ~ConcreteObject();
         void Move(const sf::Vector2f& movement);
         inline sf::Vector2f GetPosition() const{

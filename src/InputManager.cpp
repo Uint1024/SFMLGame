@@ -5,10 +5,12 @@
 
 #include "Engine.h"
 #include "GameData.h"
+#include "Globals.h"
 
-InputManager::InputManager(Engine* engine, GameData* game_data) :
-    engine_(engine), game_data_(game_data), mouse_position_world_(0.0f,0.0f),
-    player_(game_data_->GetPlayer()), le_selected_object_(kOBject_Ground_Grass)
+
+InputManager::InputManager() :
+    mouse_position_world_(0.0f,0.0f),
+    le_selected_object_(kObject_Ground_Grass)
 {
     for(int i = 0 ; i < kInput_Count ; ++i){
         keyboard_mapping_[i] = sf::Keyboard::Unknown;
@@ -34,20 +36,20 @@ InputManager::~InputManager()
 }
 
 int
-InputManager::PollEvents(){
+InputManager::PollEvents(Engine& engine, GameData& game_data){
     sf::Vector2i mouse_position_window;
 
-
-    mouse_position_window = sf::Mouse::getPosition(engine_->GetWindow());
+    mouse_position_window = sf::Mouse::getPosition(engine.GetWindow());
 
 
     keys_down_[kInput_ZoomIn] = false;
     keys_down_[kInput_ZoomOut] = false;
 
     sf::Event event;
-    sf::RenderWindow& window = engine_->GetWindow();
+    sf::RenderWindow& window = engine.GetWindow();
 
     mouse_position_world_ = window.mapPixelToCoords(mouse_position_window);
+
     mouse_tile_position_in_tiles_ =
             sf::Vector2u{static_cast<unsigned int>
                             (mouse_position_world_.x / g_tile_size.x),
@@ -55,8 +57,10 @@ InputManager::PollEvents(){
                             (mouse_position_world_.y / g_tile_size.y)};
 
     mouse_tile_position_in_pixels_ =
-            sf::Vector2u{mouse_tile_position_in_tiles_.x * g_tile_size.x,
-                         mouse_tile_position_in_tiles_.y * g_tile_size.y};
+            sf::Vector2u{static_cast<unsigned int>
+                            (mouse_tile_position_in_tiles_.x * g_tile_size.x),
+                         static_cast<unsigned int>
+                            (mouse_tile_position_in_tiles_.y * g_tile_size.y)};
 
     for(int i = 0 ; i < kInput_Count ; ++i){
         if(sf::Keyboard::isKeyPressed(keyboard_mapping_[i]) ||
@@ -86,64 +90,69 @@ InputManager::PollEvents(){
 
     }
 
-    sf::Vector2f movement = {0.0f,0.0f};
-
-    if(keys_down_[kInput_Left]){
-        movement.x -= 10;
-    }
-    if(keys_down_[kInput_Right]){
-        movement.x += 10;
-    }
-    if(keys_down_[kInput_Up]){
-        movement.y -= 10;
-    }
-    if(keys_down_[kInput_Down]){
-        movement.y += 10;
-    }
 
 
 
-    if(movement.x || movement.y){
-        engine_->MoveCamera(movement);
-        player_.Move(movement);
-    }
+    GameObject& player = game_data.GetPlayer();
+/*    if(movement.x || movement.y){
+        //engine.MoveCamera(movement);
+        //player.Move(movement);
+    }*/
 
 
     if(keys_down_[kInput_ZoomIn]){
-        engine_->ZoomIn();
+        engine.ZoomIn();
     }
     if(keys_down_[kInput_ZoomOut]){
-        engine_->ZoomOut();
+        engine.ZoomOut();
     }
 
-    if(keys_down_[kInput_ToggleLevelEditor]){
-        game_data_->ToggleLevelEditorMode();
+    if(keys_down_[kInput_ToggleLevelEditor] &&
+       !last_keys_down_[kInput_ToggleLevelEditor]){
+        game_data.ToggleLevelEditorMode();
     }
 
-    if(game_data_->GetGameState() == kGameState_Editor){
-        EditLevel();
+
+    /*if(game_data.GetGameState() == kGameState_Editor){
+        if(keys_down_[kInput_Inventory1]){
+            le_selected_object_ = kObject_Ground_Grass;
+        }
+        if(keys_down_[kInput_Inventory2]){
+            le_selected_object_ = kObject_Wall_Black;
+        }
+        if(keys_down_[kInput_Inventory3]){
+            le_selected_object_ = kObject_Ground_BlueCarpet;
+        }
+        if(keys_down_[kInput_Inventory4]){
+            le_selected_object_ = kObject_Ground_BlueCarpet;
+        }
+        EditLevel(game_data);
     }
     else{
-        Play();
-    }
+        Play(game_data);
+    }*/
+
+    last_keys_down_ = keys_down_;
 
     return 1;
 }
 
 void
-InputManager::Play(){
-    if(keys_down_[kInput_Shoot]){
-        float angle_to_mouse =
-                atan2(mouse_position_world_.y - player_.GetPosition().y,
-                      mouse_position_world_.x -  player_.GetPosition().x);
-        game_data_->PlayerShoots(angle_to_mouse);
-    }
+InputManager::Play(GameData& game_data){
+
 }
 
 void
-InputManager::EditLevel(){
-    if(keys_down_[kInput_Shoot]){
-        game_data_->CreateMapGridObject(le_selected_object_,
+InputManager::EditLevel(GameData& game_data){
+    /*if(keys_down_[kInput_Shoot]){
+        game_data.CreateMapGridObject(le_selected_object_,
                                 mouse_tile_position_in_tiles_);
-    }
+    }*/
+}
+
+float
+InputManager::GetAngleToMouse(const sf::Vector2f& object_pos)
+{
+    return atan2(mouse_position_world_.y - object_pos.y,
+              mouse_position_world_.x - object_pos.x);
 }

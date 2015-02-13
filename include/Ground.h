@@ -4,13 +4,11 @@
 #include <SFML/Graphics.hpp>
 #include "Globals.h"
 
-class Ground : public sf::Drawable
+class Ground
 {
     public:
         Ground(const eTexture texture);
         virtual ~Ground();
-        virtual void draw(sf::RenderTarget& target,
-                          sf::RenderStates states) const override;
         inline eTexture GetTextureId(){
             return texture_;
         }

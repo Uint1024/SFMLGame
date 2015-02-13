@@ -18,13 +18,21 @@ Engine::~Engine()
     //dtor
 }
 
+void
+Engine::Clear()
+{
+    window_.clear();
+    window_.setView(camera_);
+}
+
+void Engine::Display()
+{
+    window_.display();
+}
 
 
 void
 Engine::Render(GameData& game_data){
-    window_.clear();
-    window_.setView(camera_);
-
     sf::Vector2u map_size = game_data.GetMapSizeInPixels();
     sf::Vector2u tile_size = game_data.GetTileSize();
 
@@ -48,35 +56,35 @@ Engine::Render(GameData& game_data){
 
     int total_tiles = game_data.GetTotalTiles();
     sf::RectangleShape shape;
-    shape.setSize(sf::Vector2f{static_cast<float>(g_tile_size.x),
-                  static_cast<float>(g_tile_size.y)});
+    shape.setSize(sf::Vector2f{g_tile_size.x,
+                  g_tile_size.y});
 
-    int x, y = 0;
-    for(int i = 0 ; i < total_tiles ; i++, x++){
+    int x = 0;
+    int y = 0;
+    for(int i = 0 ; i < total_tiles ; ++i){
+
         if(walls[i]){
             //window_.draw(*walls[i]);
         }
 
         if(ground[i]){
-                std::cout << x * g_tile_size.x << std::endl;
-            shape.setPosition(sf::Vector2f{static_cast<float>(x * g_tile_size.x),
-                              static_cast<float>(y * g_tile_size.y)});
+            shape.setPosition(sf::Vector2f{x * g_tile_size.x,
+                              y * g_tile_size.y});
+
             shape.setFillColor(objects_colors_[ground[i]->GetTextureId()]);
             window_.draw(shape);
         }
-
-        if(x == game_data.GetMapSizeInTiles().x){
+        ++x;
+        if(x >= game_data.GetMapSizeInTiles().x){
             x = 0;
             ++y;
         }
     }
 
-    for(auto &o : projectiles){
-        window_.draw(o);
-    }
 
-    window_.draw(game_data.GetPlayer());
-    window_.display();
+    /*for(auto &o : projectiles){
+        window_.draw(o);
+    }*/
 }
 
 

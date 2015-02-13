@@ -6,8 +6,7 @@ Wall::~Wall()
     //dtor
 }
 
-Wall::Wall(const sf::Vector2f& position) :
-    ConcreteObject(position, g_tile_size)
+Wall::Wall(const sf::Vector2f& position)
 {
 
 }

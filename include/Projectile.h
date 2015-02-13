@@ -5,6 +5,7 @@
 
 #include "ConcreteObject.h"
 
+/*
 class Projectile : public sf::Drawable, public ConcreteObject
 {
     public:
@@ -26,6 +27,6 @@ class Projectile : public sf::Drawable, public ConcreteObject
 
 
 
-};
+};*/
 
 #endif // PROJECTILE_H

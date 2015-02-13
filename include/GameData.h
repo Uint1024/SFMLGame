@@ -1,36 +1,30 @@
 #ifndef GAMEDATA_H
 #define GAMEDATA_H
 
+#include <iostream>
 #include <list>
 #include <array>
 #include <SFML/System.hpp>
 #include "InputEnum.h"
-#include "Player.h"
 #include "Projectile.h"
 #include "Ground.h"
 #include "Globals.h"
+#include "GameObject.h"
 
 
 class Wall;
 class Engine;
+class InputManager;
 class GameData
 {
     public:
-        GameData(Engine& engine);
+        GameData(Engine& engine, InputManager& input_manager);
         ~GameData();
-        void ReceiveInput(std::array<bool, kInput_Count> keys_down,
-                          std::array<bool, kInput_Count> last_keys_down);
         void PlayerShoots(const float angle_to_mouse);
-        void Update();
-        void CreateMapGridObject(const eObjectType type,
-                                 const sf::Vector2u& tile_position);
+        int Update();
+        void CreateObjectAtMousePosition(const eObjectType type);
 
-
-
-        inline void ToggleLevelEditorMode(){
-            game_state_ = kGameState_Editor?    kGameState_Playing :
-                                                kGameState_Editor;
-        }
+        void ToggleLevelEditorMode();
 
         //Accessors:
         inline sf::Vector2u GetMapSizeInTiles() const{
@@ -45,14 +39,14 @@ class GameData
             return tile_size_;
         }
 
-        inline Player& GetPlayer(){
+        inline GameObject& GetPlayer(){
             return player_;
         }
 
-        inline std::list<Projectile>& GetProjectiles(){
+        inline std::list<GameObject>& GetProjectiles(){
             return projectiles_;
         }
-        inline std::vector<Wall*>& GetWalls(){
+        inline std::vector<GameObject*>& GetWalls(){
             return wall_map_;
         }
         inline std::vector<Ground*>& GetGround(){
@@ -73,13 +67,14 @@ class GameData
         sf::Vector2u map_size_tiles_;
         sf::Vector2u tile_size_;
         Engine& engine_;
+        InputManager& input_manager_;
         sf::Vector2u map_size_pixels_;
-        std::list<Projectile> projectiles_;
-        std::vector<Wall*> wall_map_;
+        std::list<GameObject> projectiles_;
+        std::vector<GameObject*> wall_map_;
 
         //the same ground type will point to the same object
         std::vector<Ground*> ground_map_;
-        Player player_;
+        GameObject player_;
         int total_tiles_;
         eGameState game_state_;
 

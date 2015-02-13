@@ -5,15 +5,17 @@
 #include "InputManager.h"
 #include <SFML/System/Vector2.hpp>
 
-sf::Vector2u g_tile_size{64,64};
+sf::Vector2f g_tile_size{64,64};
 float g_delta_time = 0.0f;
-
+eGameState g_game_state = kGameState_Playing;
 int main(){
 
 
     Engine engine(sf::VideoMode(1280, 768), "Game");
-    GameData game_data(engine);
-    InputManager input_manager(&engine, &game_data);
+
+    InputManager input_manager;
+    GameData game_data(engine, input_manager);
+
 
     bool running = true;
 
@@ -22,15 +24,12 @@ int main(){
     while (running)
     {
         g_delta_time = frame_timer.restart().asSeconds();
-        std::cout << g_delta_time << std::endl;
-        if(input_manager.PollEvents() == -1){
+        if(game_data.Update() == -1){
             running = false;
-            engine.CloseWindow();
         }
-
-        game_data.Update();
-        engine.Render(game_data);
     }
+
+    engine.CloseWindow();
 
     return EXIT_SUCCESS;
 }

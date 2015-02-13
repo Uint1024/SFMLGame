@@ -2,7 +2,7 @@
 #include <SFML/System/Vector2.hpp>
 
 extern float g_delta_time;
-extern  sf::Vector2u g_tile_size;
+extern  sf::Vector2f  g_tile_size;
 
 enum eGameState {
     kGameState_Playing,
@@ -18,7 +18,7 @@ enum eObjectType {
     kObject_Wall_Blue,
     kObject_Wall_Green,
     kObject_Ground,
-    kOBject_Ground_Grass,
+    kObject_Ground_Grass,
     kObject_Ground_Cement,
     kObject_Ground_Sand,
     kObject_Ground_Dirt,
@@ -45,3 +45,14 @@ enum eTexture {
     kTexture_Guard,
     kTexture_Count
 };
+
+enum eDirection {
+    kDirection_None,
+    kDirection_Up,
+    kDirection_Down,
+    kDirection_Left,
+    kDirection_Right,
+    kDirection_Count,
+};
+
+extern eGameState g_game_state;

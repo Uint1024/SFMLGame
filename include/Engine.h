@@ -11,8 +11,11 @@ class Engine
         void Render(GameData& game_data);
         void MoveCamera(sf::Vector2f& movement);
         void CloseWindow();
+        void Clear();
+        void Display();
         void ZoomIn();
         void ZoomOut();
+
 
         //Accessors:
         inline sf::RenderWindow& GetWindow(){
@@ -23,11 +26,18 @@ class Engine
             return camera_;
         }
 
+        inline std::array<sf::Color, kObject_Count>& GetObjectsColors(){
+            return objects_colors_;
+        }
+
+        inline sf::Vector2u GetWindowSize() const{
+            return window_.getSize();
+        }
     protected:
     private:
         sf::RenderWindow window_;
         sf::View camera_;
-        sf::Color objects_colors_[kObject_Count];
+        std::array<sf::Color, kObject_Count> objects_colors_;
 };
 
 #endif // ENGINE_H
