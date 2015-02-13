@@ -11,6 +11,7 @@ Engine::Engine(const sf::VideoMode video_mode, const char* window_name) :
     objects_colors_[kTexture_Ground_Grass] =  sf::Color{96,27,180};
     objects_colors_[kTexture_Ground_Cement] =  sf::Color{100,100,100};
     objects_colors_[kTexture_Ground_BlueCarpet] =  sf::Color{30,200,36};
+    objects_colors_[kTexture_Guard] = sf::Color{104,124,19};
 }
 
 Engine::~Engine()

@@ -18,6 +18,6 @@ class ControlsLevelEditor : public ControlsComponent
     private:
         const float speed_ = 36;
         eObjectType le_selected_object_;
-
+        InputManager& input_manager_;
 };
 #endif // CONTROLSLEVELEDITOR_H

@@ -19,6 +19,7 @@ class PhysicsBullet : public PhysicsComponent
         float angle_;
         float distance_travelled_;
         float max_distance_;
+        float damage_;
 };
 
 #endif // PHYSICSBULLET_H

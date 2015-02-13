@@ -6,13 +6,11 @@
 #include <array>
 #include <SFML/System.hpp>
 #include "InputEnum.h"
-#include "Projectile.h"
 #include "Ground.h"
 #include "Globals.h"
 #include "GameObject.h"
 
 
-class Wall;
 class Engine;
 class InputManager;
 class GameData
@@ -69,6 +67,7 @@ class GameData
         Engine& engine_;
         InputManager& input_manager_;
         sf::Vector2u map_size_pixels_;
+        std::list<GameObject> npcs_;
         std::list<GameObject> projectiles_;
         std::vector<GameObject*> wall_map_;
 

@@ -11,7 +11,7 @@ class PhysicsComponent;
 class ControlsComponent
 {
     public:
-        ControlsComponent(InputManager& input_manager);
+        ControlsComponent();
         virtual ~ControlsComponent();
         virtual void Update(GameObject* object, Engine& engine,
                             GameData& game_data) = 0;
@@ -24,8 +24,6 @@ class ControlsComponent
             movement_ = movement;
         }
     protected:
-        InputManager& input_manager_;
-
         sf::Vector2f movement_;
 
     private:

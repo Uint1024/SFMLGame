@@ -7,6 +7,8 @@
 #include "ControlsPlayer.h"
 #include "GraphicsVisible.h"
 #include "ControlsLevelEditor.h"
+#include "ControlsAI.h"
+
 
 inline sf::Vector2f
 ConvertTilePositionToPixels(const sf::Vector2u& tile_position){
@@ -15,7 +17,7 @@ ConvertTilePositionToPixels(const sf::Vector2u& tile_position){
 }
 
 GameData::GameData(Engine& engine, InputManager& input_manager) :
-    map_size_tiles_(10,10),
+    map_size_tiles_(100,100),
     tile_size_(64,64),
     engine_(engine),
     input_manager_(input_manager),
@@ -84,6 +86,11 @@ GameData::Update(){
             o->Update(engine_, *this);
         }
     }
+    
+    for(auto &o : npcs_){
+        o.Update(engine_, *this);
+        
+    }
 
     player_.Update(engine_, *this);
     //player_.GetControls()->Update(&player_, engine_, *this);
@@ -111,6 +118,14 @@ GameData::CreateObjectAtMousePosition(const eObjectType type){
                             new PhysicsSolid(),
                             new GraphicsVisible(kTexture_Wall_Black));
         break;
+    case kObject_Guard:
+        npcs_.emplace_back(GameObject(
+                input_manager_.GetMousePositionInWorldInPixels(),
+                sf::Vector2f{40,40},
+                new PhysicsSolid(),
+                new GraphicsVisible(kTexture_Guard),
+                new ControlsAI()));
+      
     default:
         std::cout << "Unknown item" << std::endl;
         break;

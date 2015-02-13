@@ -27,6 +27,13 @@ InputManager::InputManager() :
     keyboard_mapping_[kInput_ToggleLevelEditor] = sf::Keyboard::R;
     keyboard_mapping_[kInput_Inventory1] = sf::Keyboard::Num1;
     keyboard_mapping_[kInput_Inventory2] = sf::Keyboard::Num2;
+    keyboard_mapping_[kInput_Inventory3] = sf::Keyboard::Num3;
+    keyboard_mapping_[kInput_Inventory4] = sf::Keyboard::Num4;
+    keyboard_mapping_[kInput_Inventory5] = sf::Keyboard::Num5;
+    keyboard_mapping_[kInput_Inventory6] = sf::Keyboard::Num6;
+    keyboard_mapping_[kInput_Inventory7] = sf::Keyboard::Num7;
+    keyboard_mapping_[kInput_Inventory8] = sf::Keyboard::Num8;
+    keyboard_mapping_[kInput_Inventory9] = sf::Keyboard::Num9;
     mouse_mapping_[kInput_Shoot] = sf::Mouse::Left;
 }
 

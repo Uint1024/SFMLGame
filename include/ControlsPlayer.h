@@ -17,6 +17,7 @@ class ControlsPlayer : public ControlsComponent
     protected:
     private:
         const float speed_ = 10;
+        InputManager& input_manager_;
 };
 
 #endif // PLAYERCONTROLS_H

@@ -11,7 +11,7 @@
 
 
 ControlsPlayer::ControlsPlayer(InputManager& input_manager) :
-    ControlsComponent(input_manager)
+input_manager_(input_manager)
 {
     //ctor
 }

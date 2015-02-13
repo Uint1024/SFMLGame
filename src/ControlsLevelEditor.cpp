@@ -8,7 +8,7 @@
 #include "ControlsLevelEditor.h"
 
 ControlsLevelEditor::ControlsLevelEditor(InputManager& input_manager) :
-    ControlsComponent(input_manager)
+    input_manager_(input_manager)
 {
     //ctor
 }
@@ -55,7 +55,7 @@ ControlsLevelEditor::Update(GameObject* object, Engine& engine,
         le_selected_object_ = kObject_Wall_Black;
     }
     if(keys_down[kInput_Inventory3]){
-        le_selected_object_ = kObject_Ground_BlueCarpet;
+        le_selected_object_ = kObject_Guard;
     }
     if(keys_down[kInput_Inventory4]){
         le_selected_object_ = kObject_Ground_BlueCarpet;
