@@ -8,8 +8,9 @@
 #include "Bbox.h"
 #include "ControlsComponent.h"
 
-
+class InventoryComponent;
 class HealthComponent;
+class UsableComponent;
 class PhysicsComponent;
 class GraphicsComponent;
 class Engine;
@@ -17,29 +18,15 @@ class GameData;
 
 class GameObject : public sf::Transformable
 {
-    public:
-
-        GameObject(sf::Vector2f position,
-                   PhysicsComponent* physics,
-                   GraphicsComponent* graphics);
-
-        GameObject(sf::Vector2f position,
-                       sf::Vector2f dimensions,
-                       PhysicsComponent* physics,
-                       GraphicsComponent* graphics);
-
+    public:        
         GameObject(sf::Vector2f position,
                    sf::Vector2f dimensions,
                    PhysicsComponent* physics,
                    GraphicsComponent* graphics,
-                   ControlsComponent* controls);
-        
-        GameObject(sf::Vector2f position,
-                   sf::Vector2f dimensions,
-                   PhysicsComponent* physics,
-                   GraphicsComponent* graphics,
-                   ControlsComponent* controls,
-                   HealthComponent* health);
+                UsableComponent* usable,
+                   ControlsComponent* controls = nullptr,
+                   HealthComponent* health = nullptr,
+                InventoryComponent* inventory = nullptr);
         
         virtual ~GameObject();
         bool Update(Engine& engine, GameData& game_data);
@@ -60,6 +47,12 @@ class GameObject : public sf::Transformable
         HealthComponent* GetHealth(){
             return health_;
         }
+        
+        UsableComponent* GetUsable() const {
+            return usable_;
+        }
+
+        
 
          Die() {
             alive_ = false;
@@ -85,9 +78,9 @@ class GameObject : public sf::Transformable
         GraphicsComponent* graphics_;
         ControlsComponent* controls_;
         HealthComponent* health_;
-        
+        InventoryComponent* inventory_;
         //for doors, health pack, levers, chests...
-        UseComponent* use_;
+        UsableComponent* usable_;
         bool alive_;
         std::list<Message> messages_list_;
 

@@ -5,7 +5,8 @@
 #include "GameData.h"
 #include "PhysicsSolid.h"
 #include "Bbox.h"
-
+#include "UseComponent.h"
+#include "Globals.h"
 
 PhysicsSolid::PhysicsSolid()
 {
@@ -45,6 +46,7 @@ PhysicsSolid::Update(GameObject* object,
                 ++nb_of_collisions_in_4_directions[direction_of_collision];
             }
         }
+        
         for(auto &o : doors_map){
             eDirection direction_of_collision = kDirection_None;
             
@@ -52,7 +54,7 @@ PhysicsSolid::Update(GameObject* object,
                                                    o.GetBbox(),
                                                    direction_of_collision);
             
-            if(collision == true){
+            if(collision == true && o.GetUsable()->GetState() == kObjectState_Locked){
                 controls->AddObjectCollision(&o);
                 collisions_in_4_directions[direction_of_collision] = &o.GetBbox();
                 ++nb_of_collisions_in_4_directions[direction_of_collision];

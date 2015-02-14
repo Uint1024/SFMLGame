@@ -12,6 +12,8 @@
 #include "GraphicsComponent.h"
 #include "PhysicsComponent.h"
 #include "ControlsAI.h"
+#include "DoorComponent.h"
+#include "InventoryComponent.h"
 
 
 inline sf::Vector2f
@@ -33,8 +35,9 @@ GameData::GameData(Engine& engine, InputManager& input_manager) :
                        sf::Vector2f{40,40},
                        new PhysicsSolid(),
                        new GraphicsVisible(kTexture_Ground_Cement),
+                       nullptr,
                        new ControlsPlayer(input_manager),
-                       new HealthComponent()))
+                       new HealthComponent(), new InventoryComponent()))
 {
     sf::Vector2u window_size = engine_.GetWindow().getSize();
 
@@ -55,7 +58,8 @@ GameData::GameData(Engine& engine, InputManager& input_manager) :
     sf::Vector2f{500,500},
                             g_tile_size,
                             new PhysicsSolid(),
-                            new GraphicsVisible(kTexture_Wall_Black)));
+                            new GraphicsVisible(kTexture_Wall_Black),
+                            nullptr));
 
 }
 
@@ -99,6 +103,10 @@ GameData::Update(){
         o.Update(engine_, *this);
         
     }
+    for(auto &o : doors_map_){
+        o.Update(engine_, *this);
+    }
+    
     
     for(auto o = npcs_.begin() ; o != npcs_.end() ; ){
         if(!o->Update(engine_, *this)){
@@ -134,7 +142,8 @@ GameData::CreateObjectAtMousePosition(const eObjectType type){
                             grid_pos_pixels,
                             g_tile_size,
                             new PhysicsSolid(),
-                            new GraphicsVisible(kTexture_Wall_Black)));  
+                            new GraphicsVisible(kTexture_Wall_Black),
+                            nullptr));  
         occupied_solid_map_[vector_position] = true;
     }else if (type == kObject_Door &&
         !occupied_solid_map_[vector_position]) {
@@ -142,7 +151,11 @@ GameData::CreateObjectAtMousePosition(const eObjectType type){
                             grid_pos_pixels,
                             g_tile_size,
                             new PhysicsSolid(),
-                            new GraphicsVisible(kTexture_Door_Grey)));
+                            new GraphicsVisible(kTexture_Door_Grey),
+                            new DoorComponent()                            
+                            ));
+                                
+                                          
         occupied_solid_map_[vector_position] = true;
     } else if(type == kObject_Guard) {
         npcs_.emplace_back(GameObject(
@@ -150,8 +163,10 @@ GameData::CreateObjectAtMousePosition(const eObjectType type){
                 sf::Vector2f{40,40},
                 new PhysicsSolid(),
                 new GraphicsVisible(kTexture_Guard),
+                nullptr,
                 new ControlsAI(),
-                new HealthComponent()));
+                new HealthComponent(),
+                new InventoryComponent()));
     }   
 }
 

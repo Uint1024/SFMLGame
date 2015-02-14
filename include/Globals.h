@@ -3,6 +3,7 @@
 
 extern float g_delta_time;
 extern  sf::Vector2f  g_tile_size;
+extern int g_game_time;
 
 enum eGameState {
     kGameState_Playing,
@@ -52,4 +53,11 @@ enum eDirection {
     kDirection_Count,
 };
 
+enum eObjectState {
+    kObjectState_Open,
+    kObjectState_Close,
+    kObjectState_Locked,
+    kObjectState_On,
+    kObjectState_Off
+};
 extern eGameState g_game_state;

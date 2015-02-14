@@ -7,10 +7,11 @@
 
 #include "UseComponent.h"
 
-UsableComponent::UsableComponent() {
+UsableComponent::UsableComponent(eObjectState state) :
+state_(state){
 }
 
-UsableComponent::UsableComponent(const UseComponent& orig) {
+UsableComponent::UsableComponent(const UsableComponent& orig) {
 }
 
 UsableComponent::~UsableComponent() {

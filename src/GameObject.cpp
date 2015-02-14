@@ -8,52 +8,27 @@
 #include "GraphicsComponent.h"
 #include "ControlsComponent.h"
 #include "HealthComponent.h"
+#include "UseComponent.h"
+#include "InventoryComponent.h"
 
-GameObject::GameObject(sf::Vector2f position,
-                       sf::Vector2f dimensions,
-                       PhysicsComponent* physics,
-                       GraphicsComponent* graphics,
-                       ControlsComponent* controls) :
-    physics_(physics),
-    graphics_(graphics),
-    controls_(controls),
-    alive_(true),
-    bbox_(position, dimensions),
-    health_(nullptr),
-    messages_list_{}
-{
-    MoveTo(position);
-}
-
-GameObject::GameObject(sf::Vector2f position,
-                       sf::Vector2f dimensions,
-                       PhysicsComponent* physics,
-                       GraphicsComponent* graphics,
-                       ControlsComponent* controls,
-                       HealthComponent* health) :
+    
+GameObject::GameObject( sf::Vector2f position,
+                        sf::Vector2f dimensions,
+                        PhysicsComponent* physics,
+                        GraphicsComponent* graphics,
+                        UsableComponent* usable,
+                        ControlsComponent* controls,
+                        HealthComponent* health,
+                        InventoryComponent* inventory) :
     physics_(physics),
     graphics_(graphics),
     controls_(controls),
     alive_(true),
     bbox_(position, dimensions),
     health_(health),
-    messages_list_{}
-
-{
-    MoveTo(position);
-}
-
-GameObject::GameObject(sf::Vector2f position,
-                       sf::Vector2f dimensions,
-                       PhysicsComponent* physics,
-                       GraphicsComponent* graphics) :
-    physics_(physics),
-    graphics_(graphics),
-    controls_(nullptr),
-    alive_(true),
-    bbox_(position, dimensions),
-    health_(nullptr),
-    messages_list_{}
+    messages_list_{},
+    usable_(usable),
+    inventory_(inventory)
 {
     MoveTo(position);
 }
@@ -72,10 +47,10 @@ GameObject::Update(Engine& engine, GameData& game_data){
         it != messages_list_.end() ;){
         
         if((*it).message_id == kMsg_Use){
-            if(UseComponent){
-                use_->Use();
+            if(usable_){
+                std::cout << "has message" << std::endl;
+                usable_->Use((*it).sender);
             }
-            std::cout << "heh" << std::endl;
             it = messages_list_.erase(it); 
             
             

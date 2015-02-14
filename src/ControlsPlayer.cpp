@@ -60,7 +60,7 @@ ControlsPlayer::Update(GameObject* object, Engine& engine,
                 GameObject(object->getPosition(),
                            sf::Vector2f{10,10},
                            new PhysicsBullet(input_manager_.GetAngleToMouse(position)),
-                           new GraphicsVisible(kTexture_Ground_Cement)));
+                           new GraphicsVisible(kTexture_Ground_Cement), nullptr));
     }
     
     for(auto &o : objects_collisions_list_){

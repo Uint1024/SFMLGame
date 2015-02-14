@@ -14,12 +14,14 @@ class GameObject;
 class DoorComponent : public UsableComponent {
 public:
     DoorComponent();
-    DoorComponent(const DoorComponent& orig);
     virtual ~DoorComponent();
     void Use(GameObject* object);
+    bool IsUnlocked(){
+        return unlock_timer_ > time_to_unlock_;
+    }
     private:
-        float time_to_open;
-        float open_timer;
+        float time_to_unlock_;
+        float unlock_timer_;
 
 };
 
