@@ -12,19 +12,8 @@ enum eGameState {
 
 enum eObjectType {
     kObject_Wall,
-    kObject_Wall_Black,
-    kObject_Wall_LightGrey,
-    kObject_Wall_DarkGrey,
-    kObject_Wall_Blue,
-    kObject_Wall_Green,
     kObject_Ground,
-    kObject_Ground_Grass,
-    kObject_Ground_Cement,
-    kObject_Ground_Sand,
-    kObject_Ground_Dirt,
-    kObject_Ground_BlueCarpet,
-    kObject_Ground_GreenCarpet,
-    kObject_Ground_Wood,
+    kObject_Door,
     kObject_Guard,
     kObject_Count
 };
@@ -42,8 +31,16 @@ enum eTexture {
     kTexture_Ground_BlueCarpet,
     kTexture_Ground_GreenCarpet,
     kTexture_Ground_Wood,
+    kTexture_Door_Grey,
     kTexture_Guard,
     kTexture_Count
+};
+
+
+enum eMsg {
+    
+    kMsg_Use = 1,
+    kMsg_Damage
 };
 
 enum eDirection {

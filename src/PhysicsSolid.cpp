@@ -24,33 +24,49 @@ PhysicsSolid::Update(GameObject* object,
                      Engine& engine)
 {
     if(controls){
-
         sf::Vector2f movement = controls->GetMovement();
-        std::vector<GameObject*> walls_map = game_data.GetWalls();
+        auto& walls_map = game_data.GetWalls();
+        auto& doors_map = game_data.GetDoors();
         Bbox temp_bbox = object->GetBbox();
         temp_bbox.Move(movement);
-
+        
         std::array<Bbox*, kDirection_Count> collisions_in_4_directions{nullptr};
         std::array<int, kDirection_Count> nb_of_collisions_in_4_directions{0};
-        for(GameObject* o : walls_map){
+        bool collision = false;
+        for(auto &o : walls_map){
             eDirection direction_of_collision = kDirection_None;
-            if(o && object->GetBbox().CheckFutureCollision(movement,
-                                                   o->GetBbox(),
-                                                   direction_of_collision)){
-
-                collisions_in_4_directions[direction_of_collision] = &o->GetBbox();
+            
+            collision = object->GetBbox().CheckFutureCollision(movement,
+                                                   o.GetBbox(),
+                                                   direction_of_collision);
+            
+            if(collision == true){
+                collisions_in_4_directions[direction_of_collision] = &o.GetBbox();
                 ++nb_of_collisions_in_4_directions[direction_of_collision];
             }
         }
-
-
+        for(auto &o : doors_map){
+            eDirection direction_of_collision = kDirection_None;
+            
+            collision = object->GetBbox().CheckFutureCollision(movement,
+                                                   o.GetBbox(),
+                                                   direction_of_collision);
+            
+            if(collision == true){
+                controls->AddObjectCollision(&o);
+                collisions_in_4_directions[direction_of_collision] = &o.GetBbox();
+                ++nb_of_collisions_in_4_directions[direction_of_collision];
+            }
+        }
+        
+        
+                
+        
         if(collisions_in_4_directions[kDirection_Down]){
             float up = collisions_in_4_directions[kDirection_Down]->GetUp();
             movement.y = up - object->GetBbox().GetDown() - 1;
-
             float left = collisions_in_4_directions[kDirection_Down]->GetLeft();
             float right = collisions_in_4_directions[kDirection_Down]->GetRight();
-
             if(nb_of_collisions_in_4_directions[kDirection_Down] == 1){
                 if(object->GetBbox().GetRight() - left < 30){
                     movement.x -= 3;

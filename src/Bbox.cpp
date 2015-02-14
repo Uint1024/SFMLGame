@@ -72,6 +72,7 @@ Bbox::CheckFutureCollision(sf::Vector2f movement,
           future_bbox.right_ > other_bbox.left_ &&
           future_bbox.left_ < other_bbox.right_)
     {
+        std::cout << "collision down " << std::endl;
         direction_of_collision = kDirection_Down;
         return true;
     }
@@ -81,6 +82,7 @@ Bbox::CheckFutureCollision(sf::Vector2f movement,
           future_bbox.right_ > other_bbox.left_ &&
           future_bbox.left_ < other_bbox.right_)
     {
+        std::cout << "collision up "<<  std::endl;
         direction_of_collision = kDirection_Up;
         return true;
     }
@@ -90,6 +92,7 @@ Bbox::CheckFutureCollision(sf::Vector2f movement,
           future_bbox.down_ > other_bbox.up_ &&
           future_bbox.up_ < other_bbox.down_)
     {
+        std::cout << "collision right " << std::endl;
         direction_of_collision = kDirection_Right;
         return true;
     }
@@ -99,6 +102,7 @@ Bbox::CheckFutureCollision(sf::Vector2f movement,
           future_bbox.down_ > other_bbox.up_ &&
           future_bbox.up_ < other_bbox.down_)
     {
+        std::cout << "collision left " << std::endl;
         direction_of_collision = kDirection_Left;
         return true;
     }

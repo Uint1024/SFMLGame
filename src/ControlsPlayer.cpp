@@ -1,4 +1,7 @@
+#include <string>
 #include <SFML/System/Vector2.hpp>
+#include "Message.h"
+
 #include "ControlsPlayer.h"
 #include "GameObject.h"
 #include "InputManager.h"
@@ -51,7 +54,6 @@ ControlsPlayer::Update(GameObject* object, Engine& engine,
         movement_.y += speed_;
     }
 
-
     sf::Vector2f position = object->getPosition();
     if(keys_down[kInput_Shoot]){
         game_data.GetProjectiles().emplace_back(
@@ -60,4 +62,10 @@ ControlsPlayer::Update(GameObject* object, Engine& engine,
                            new PhysicsBullet(input_manager_.GetAngleToMouse(position)),
                            new GraphicsVisible(kTexture_Ground_Cement)));
     }
+    
+    for(auto &o : objects_collisions_list_){
+        o->ReceiveMessage(Message{object, kMsg_Use, 0, 0});
+    }
+    
+    objects_collisions_list_.clear();
 }

@@ -1,5 +1,7 @@
 #ifndef GAMEOBJECT_H
 #define GAMEOBJECT_H
+#include <string>
+#include "Message.h"
 #include "Globals.h"
 #include <SFML/Graphics/Transformable.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
@@ -31,31 +33,43 @@ class GameObject : public sf::Transformable
                    PhysicsComponent* physics,
                    GraphicsComponent* graphics,
                    ControlsComponent* controls);
+        
+        GameObject(sf::Vector2f position,
+                   sf::Vector2f dimensions,
+                   PhysicsComponent* physics,
+                   GraphicsComponent* graphics,
+                   ControlsComponent* controls,
+                   HealthComponent* health);
+        
         virtual ~GameObject();
         bool Update(Engine& engine, GameData& game_data);
         void Move(const sf::Vector2f& movement);
         void MoveTo(const sf::Vector2f& position);
-        //void SendMessage();
-
+        void ReceiveMessage(Message&& message);
+        
         //Accessors
-        inline eObjectType GetType() const{
+        eObjectType GetType() const{
             return type;
         };
 
 
-        inline ControlsComponent* GetControls() {
+        ControlsComponent* GetControls() {
           return controls_;
         };
+        
+        HealthComponent* GetHealth(){
+            return health_;
+        }
 
-        inline Die() {
+         Die() {
             alive_ = false;
         }
 
-        inline Bbox& GetBbox() {
+        Bbox& GetBbox() {
             return bbox_;
         }
 
-        inline void SetControls(ControlsComponent* controls){
+        void SetControls(ControlsComponent* controls){
             delete controls_;
             controls_ = nullptr;
             controls_ = controls;
@@ -71,7 +85,11 @@ class GameObject : public sf::Transformable
         GraphicsComponent* graphics_;
         ControlsComponent* controls_;
         HealthComponent* health_;
+        
+        //for doors, health pack, levers, chests...
+        UseComponent* use_;
         bool alive_;
+        std::list<Message> messages_list_;
 
 };
 

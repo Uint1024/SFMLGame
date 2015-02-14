@@ -25,32 +25,35 @@ class GameData
         void ToggleLevelEditorMode();
 
         //Accessors:
-        inline sf::Vector2u GetMapSizeInTiles() const{
+        sf::Vector2u GetMapSizeInTiles() const{
             return map_size_tiles_;
         }
 
-        inline sf::Vector2u GetMapSizeInPixels() const{
+        sf::Vector2u GetMapSizeInPixels() const{
             return map_size_pixels_;
         }
 
-        inline sf::Vector2u GetTileSize() const{
+        sf::Vector2u GetTileSize() const{
             return tile_size_;
         }
 
-        inline GameObject& GetPlayer(){
+        GameObject& GetPlayer(){
             return player_;
         }
 
-        inline std::list<GameObject>& GetProjectiles(){
+        auto& GetProjectiles(){
             return projectiles_;
         }
-        inline std::vector<GameObject*>& GetWalls(){
+        auto& GetWalls(){
             return wall_map_;
         }
-        inline std::vector<Ground*>& GetGround(){
+        auto& GetDoors(){
+            return doors_map_;
+        }
+        auto& GetGround(){
             return ground_map_;
         }
-        inline auto& GetNpcs(){
+        auto& GetNpcs(){
             return npcs_;
         }
        
@@ -73,7 +76,8 @@ class GameData
         sf::Vector2u map_size_pixels_;
         std::list<GameObject> npcs_;
         std::list<GameObject> projectiles_;
-        std::vector<GameObject*> wall_map_;
+        std::vector<GameObject> wall_map_;
+        std::vector<GameObject> doors_map_;
 
         //the same ground type will point to the same object
         std::vector<Ground*> ground_map_;
@@ -83,6 +87,10 @@ class GameData
 
         Ground ground_grass_model;
         Ground ground_dirt_model;
+        
+        //the map is divided in 2 layers: ground and solid (walls, doors etc.)
+        //this variable is the status of each tile (true is solid, false isn't)
+        std::vector<bool> occupied_solid_map_;
 
 };
 

@@ -8,21 +8,22 @@
 #ifndef HEALTHCOMPONENT_H
 #define	HEALTHCOMPONENT_H
 #include "GameObject.h"
-#include "Engine.h"
-#include "GameData.h"
 
 class HealthComponent {
 public:
     HealthComponent();
     HealthComponent(const HealthComponent& orig);
     virtual ~HealthComponent();
-    virtual void Update(GameObject* object, Engine& engine,
-                              GameData& game_data);
-    inline bool IsDead() {
-        return hp <= 0;
+    virtual void Update(GameObject* object);
+    void TakeDamage(const int damage){
+        hp_ -= damage;
+    }
+    
+    bool IsAlive() const{
+        return hp_ > 0;
     }
 private:
-    int hp;
+    int hp_;
     
 };
 

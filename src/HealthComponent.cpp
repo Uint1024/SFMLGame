@@ -7,7 +7,9 @@
 
 #include "HealthComponent.h"
 
-HealthComponent::HealthComponent(){
+HealthComponent::HealthComponent() :
+hp_(40)
+{
 }
 
 HealthComponent::HealthComponent(const HealthComponent& orig) {
@@ -17,7 +19,6 @@ HealthComponent::~HealthComponent() {
 }
 
 void 
-HealthComponent::Update(GameObject* object, Engine& engine, 
-        GameData& game_data) {
+HealthComponent::Update(GameObject* object) {
     
 }

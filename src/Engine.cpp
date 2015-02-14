@@ -12,6 +12,7 @@ Engine::Engine(const sf::VideoMode video_mode, const char* window_name) :
     objects_colors_[kTexture_Ground_Cement] =  sf::Color{100,100,100};
     objects_colors_[kTexture_Ground_BlueCarpet] =  sf::Color{30,200,36};
     objects_colors_[kTexture_Guard] = sf::Color{104,124,19};
+    objects_colors_[kTexture_Door_Grey] = sf::Color{60,70,60};
 }
 
 Engine::~Engine()
@@ -63,11 +64,6 @@ Engine::Render(GameData& game_data){
     int x = 0;
     int y = 0;
     for(int i = 0 ; i < total_tiles ; ++i){
-
-        if(walls[i]){
-            //window_.draw(*walls[i]);
-        }
-
         if(ground[i]){
             shape.setPosition(sf::Vector2f{x * g_tile_size.x,
                               y * g_tile_size.y});

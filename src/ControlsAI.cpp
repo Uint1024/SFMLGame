@@ -39,4 +39,5 @@ void ControlsAI::Update(GameObject* object,
   else {
     movement_.y -= 5;
   }
+  objects_collisions_list_.clear();
 }

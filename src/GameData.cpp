@@ -33,7 +33,8 @@ GameData::GameData(Engine& engine, InputManager& input_manager) :
                        sf::Vector2f{40,40},
                        new PhysicsSolid(),
                        new GraphicsVisible(kTexture_Ground_Cement),
-                       new ControlsPlayer(input_manager)))
+                       new ControlsPlayer(input_manager),
+                       new HealthComponent()))
 {
     sf::Vector2u window_size = engine_.GetWindow().getSize();
 
@@ -44,9 +45,17 @@ GameData::GameData(Engine& engine, InputManager& input_manager) :
 
 
     for(int i = 0 ; i < total_tiles_ ; ++i){
-        wall_map_.push_back(nullptr);
+        occupied_solid_map_.push_back(false);
         ground_map_.push_back(&ground_dirt_model);
     }
+    
+    
+    
+    wall_map_.emplace_back(GameObject(
+    sf::Vector2f{500,500},
+                            g_tile_size,
+                            new PhysicsSolid(),
+                            new GraphicsVisible(kTexture_Wall_Black)));
 
 }
 
@@ -71,34 +80,40 @@ GameData::Update(){
     shape.setSize(sf::Vector2f{g_tile_size.x,
                   g_tile_size.y});
 
+    if(g_game_state){
+        //engine_
+    }
     engine_.Render(*this);
 
-    //if(g_game_state == kGameState_Playing){
-        for(auto o = projectiles_.begin() ; o != projectiles_.end() ; ){
-
-            if(!o->Update(engine_, *this)){
-                o = projectiles_.erase(o);
-            }
-            else{
-                ++o;
-            }
+    for(auto o = projectiles_.begin() ; o != projectiles_.end() ; ){
+        if(!o->Update(engine_, *this)){
+            o = projectiles_.erase(o);
         }
-    //}
-
-    for(auto &o : wall_map_){
-        if(o){
-            o->Update(engine_, *this);
+        else{
+            ++o;
         }
     }
-    
-    for(auto &o : npcs_){
+
+
+    for(auto &o : wall_map_){
         o.Update(engine_, *this);
         
     }
+    
+    for(auto o = npcs_.begin() ; o != npcs_.end() ; ){
+        if(!o->Update(engine_, *this)){
+            o = npcs_.erase(o);
+        }
+        else{
+            ++o;
+        }    
+    }
 
     player_.Update(engine_, *this);
-    //player_.GetControls()->Update(&player_, engine_, *this);
-
+    if(g_game_state == kGameState_Editor){
+        player_.GetControls()->Update(&player_, engine_, *this);
+    }
+    
     engine_.Display();
     return quit;
 }
@@ -106,39 +121,42 @@ GameData::Update(){
 void
 GameData::CreateObjectAtMousePosition(const eObjectType type){
     int vector_position = input_manager_.GetMouseVectorMapPosition(map_size_tiles_);
+    std::cout << vector_position << std::endl;
     sf::Vector2f grid_pos_pixels{
         static_cast<float>(input_manager_.GetMouseTilePositionInPixels().x),
         static_cast<float>(input_manager_.GetMouseTilePositionInPixels().y)};
 
-    switch(type){
-    case kObject_Ground_Grass:
+    if(type == kObject_Ground){
         ground_map_[vector_position] = &ground_grass_model;
-        break;
-    case kObject_Wall_Black:
-        wall_map_[vector_position] =
-                    new GameObject(
+    }else if(type == kObject_Wall && 
+        !occupied_solid_map_[vector_position]){
+                wall_map_.emplace_back(GameObject(
                             grid_pos_pixels,
                             g_tile_size,
                             new PhysicsSolid(),
-                            new GraphicsVisible(kTexture_Wall_Black));
-        break;
-    case kObject_Guard:
+                            new GraphicsVisible(kTexture_Wall_Black)));  
+        occupied_solid_map_[vector_position] = true;
+    }else if (type == kObject_Door &&
+        !occupied_solid_map_[vector_position]) {
+        doors_map_.emplace_back(GameObject(
+                            grid_pos_pixels,
+                            g_tile_size,
+                            new PhysicsSolid(),
+                            new GraphicsVisible(kTexture_Door_Grey)));
+        occupied_solid_map_[vector_position] = true;
+    } else if(type == kObject_Guard) {
         npcs_.emplace_back(GameObject(
                 input_manager_.GetMousePositionInWorldInPixels(),
                 sf::Vector2f{40,40},
                 new PhysicsSolid(),
                 new GraphicsVisible(kTexture_Guard),
-                new ControlsAI()));
-      
-    default:
-        std::cout << "Unknown item" << std::endl;
-        break;
-    }
+                new ControlsAI(),
+                new HealthComponent()));
+    }   
 }
 
 void
-GameData::ToggleLevelEditorMode()
-{
+GameData::ToggleLevelEditorMode(){
     if(g_game_state == kGameState_Editor){
         g_game_state = kGameState_Playing;
         player_.SetControls(new ControlsPlayer(input_manager_));

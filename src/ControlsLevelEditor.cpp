@@ -49,19 +49,21 @@ ControlsLevelEditor::Update(GameObject* object, Engine& engine,
     sf::Vector2f position = object->getPosition();
 
     if(keys_down[kInput_Inventory1]){
-        le_selected_object_ = kObject_Ground_Grass;
+        le_selected_object_ = kObject_Ground;
     }
     if(keys_down[kInput_Inventory2]){
-        le_selected_object_ = kObject_Wall_Black;
+        le_selected_object_ = kObject_Wall;
     }
     if(keys_down[kInput_Inventory3]){
         le_selected_object_ = kObject_Guard;
     }
     if(keys_down[kInput_Inventory4]){
-        le_selected_object_ = kObject_Ground_BlueCarpet;
+        le_selected_object_ = kObject_Door;
     }
 
     if(keys_down[kInput_Shoot]){
         game_data.CreateObjectAtMousePosition(le_selected_object_);
     }
+    
+    objects_collisions_list_.clear();
 }

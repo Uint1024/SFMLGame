@@ -10,7 +10,7 @@
 
 InputManager::InputManager() :
     mouse_position_world_(0.0f,0.0f),
-    le_selected_object_(kObject_Ground_Grass)
+    le_selected_object_(kObject_Ground)
 {
     for(int i = 0 ; i < kInput_Count ; ++i){
         keyboard_mapping_[i] = sf::Keyboard::Unknown;

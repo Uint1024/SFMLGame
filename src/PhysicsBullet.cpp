@@ -1,13 +1,25 @@
 #include "PhysicsBullet.h"
 #include "GameObject.h"
 #include "GameData.h"
+#include "HealthComponent.h"
 #include "Maths.h"
 
 PhysicsBullet::PhysicsBullet(const float angle) :
     angle_(angle),
     distance_travelled_(0.0f),
-    max_distance_(1200.0f)
+    max_distance_(1200.0f),
+    damage_(1),
+    direction_of_collision_(kDirection_None),
+    collisions_in_4_directions_{nullptr},
+    nb_of_collisions_in_4_directions_{0},
+    speed_(10),
+    movement_{0.0f,0.0f},
+    velocity_{static_cast<float>(speed_ * cos(angle)),
+              static_cast<float>(speed_ * sin(angle))},
+    distance_travelled_per_tick_{PythagorasDistance(velocity_)}
+        
 {
+    distance_travelled_per_tick_ = PythagorasDistance(velocity_);
     if(angle_ < 0){
         angle_ += 6.28f;
     }
@@ -24,57 +36,47 @@ PhysicsBullet::Update(GameObject* object,
                       ControlsComponent* controls,
                       Engine& engine)
 {
-    
-    float speed = 10;
-    sf::Vector2f movement{static_cast<float>(speed * cos(angle_)),
-                          static_cast<float>(speed * sin(angle_))};
+    object->Move(velocity_);
 
-    object->Move(movement);
-
-    distance_travelled_ += PythagorasDistance(movement);
-
+    distance_travelled_ += distance_travelled_per_tick_;
     if(distance_travelled_ > max_distance_){
         object->Die();
         return false;
     }
-    
-    std::cout << angle_ << std::endl;
-    //angle_ = 3.14 + 3.14/2.0f;
-    
-    
-    std::vector<GameObject*>& walls_map = game_data.GetWalls();
-    auto& npcs = game_data.GetNpcs();
-    eDirection direction_of_collision = kDirection_None;
-    std::array<Bbox*, kDirection_Count> collisions_in_4_directions{nullptr};
-    std::array<int, kDirection_Count> nb_of_collisions_in_4_directions{0};
         
-    for(GameObject* o : walls_map){
-        if(o && object->GetBbox().CheckFutureCollision(movement,
-                                               o->GetBbox(),
-                                               direction_of_collision)){
-            collisions_in_4_directions[direction_of_collision] = &o->GetBbox();        
-            ++nb_of_collisions_in_4_directions[direction_of_collision];
-        }
-    }
-    
-    distance_travelled_ = max_distance_ - 400;
+    auto& walls_map = game_data.GetWalls();
+    auto& npcs = game_data.GetNpcs();
 
-    if(collisions_in_4_directions[kDirection_Down]){
-        if(nb_of_collisions_in_4_directions[kDirection_Left] < 2){
-                collisions_in_4_directions[kDirection_Left] = nullptr;
-            }
-        if(nb_of_collisions_in_4_directions[kDirection_Right] < 2){
-            collisions_in_4_directions[kDirection_Right] = nullptr;
+
+    collisions_in_4_directions_ = {nullptr, nullptr, nullptr, nullptr};
+    nb_of_collisions_in_4_directions_ = {0,0,0,0};
+    
+    for(GameObject &o : walls_map){
+        direction_of_collision_ = kDirection_None;
+        if(object->GetBbox().CheckFutureCollision(velocity_,
+                                               o.GetBbox(),
+                                               direction_of_collision_)){
+            collisions_in_4_directions_[direction_of_collision_] = &o.GetBbox();        
+            ++nb_of_collisions_in_4_directions_[direction_of_collision_];
         }
     }
-    if(collisions_in_4_directions[kDirection_Left] ||
-            collisions_in_4_directions[kDirection_Right]){
+
+    if(collisions_in_4_directions_[kDirection_Left] ||
+            collisions_in_4_directions_[kDirection_Right]){
         angle_ = -(angle_ - PI);
+        velocity_ = {static_cast<float>(speed_ * cos(angle_)),
+              static_cast<float>(speed_ * sin(angle_))};
+    }
+    if(collisions_in_4_directions_[kDirection_Up] ||
+            collisions_in_4_directions_[kDirection_Down]){
+        angle_ = (- angle_) ;
+        velocity_ = {static_cast<float>(speed_ * cos(angle_)),
+              static_cast<float>(speed_ * sin(angle_))};
     }
     
     for(auto &npc : npcs){
         if(object->GetBbox().CollidesWithBbox(npc.GetBbox())){
-            
+            npc.GetHealth()->TakeDamage(damage_);
             object->Die();
             
         }
