@@ -7,13 +7,14 @@
 
 #ifndef WEAPONSCOMPONENT_H
 #define	WEAPONSCOMPONENT_H
+#include "GameData.h"
 
 class WeaponsComponent {
 public:
     WeaponsComponent();
     WeaponsComponent(const WeaponsComponent& orig);
     virtual ~WeaponsComponent();
-    
+    virtual void Shoot(GameData& game_data, float angle);
 private:
 
 };

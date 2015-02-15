@@ -18,26 +18,28 @@ class Engine
 
 
         //Accessors:
-        inline sf::RenderWindow& GetWindow(){
+        sf::RenderWindow& GetWindow(){
             return window_;
         }
 
-        inline sf::View& GetCamera(){
+        sf::View& GetCamera(){
             return camera_;
         }
 
-        inline std::array<sf::Color, kObject_Count>& GetObjectsColors(){
+        std::array<sf::Color, kTexture_Count>& GetObjectsColors(){
             return objects_colors_;
         }
 
-        inline sf::Vector2u GetWindowSize() const{
+        sf::Vector2u GetWindowSize() const{
             return window_.getSize();
         }
+        
+        void CenterCameraOnPlayer(sf::Vector2f player_position);
     protected:
     private:
         sf::RenderWindow window_;
         sf::View camera_;
-        std::array<sf::Color, kObject_Count> objects_colors_;
+        std::array<sf::Color, kTexture_Count> objects_colors_;
 };
 
 #endif // ENGINE_H

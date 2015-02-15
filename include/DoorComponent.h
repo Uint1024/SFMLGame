@@ -15,13 +15,10 @@ class DoorComponent : public UsableComponent {
 public:
     DoorComponent();
     virtual ~DoorComponent();
-    void Use(GameObject* object);
-    bool IsUnlocked(){
-        return unlock_timer_ > time_to_unlock_;
-    }
+    void Use(GameObject* user, GameObject* used);
+
     private:
-        float time_to_unlock_;
-        float unlock_timer_;
+
 
 };
 

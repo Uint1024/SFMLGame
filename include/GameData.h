@@ -57,6 +57,10 @@ class GameData
             return npcs_;
         }
        
+        std::vector<std::list<sf::Vector2f> >& GetAiPaths() const {
+            return ai_paths_;
+        }
+
 
         inline int GetTotalTiles() const {
             return total_tiles_;
@@ -78,6 +82,7 @@ class GameData
         std::list<GameObject> projectiles_;
         std::vector<GameObject> wall_map_;
         std::vector<GameObject> doors_map_;
+        //std::vector<GameObject> usable_map;
 
         //the same ground type will point to the same object
         std::vector<Ground*> ground_map_;
@@ -91,7 +96,7 @@ class GameData
         //the map is divided in 2 layers: ground and solid (walls, doors etc.)
         //this variable is the status of each tile (true is solid, false isn't)
         std::vector<bool> occupied_solid_map_;
-
+        std::vector<std::list<sf::Vector2f>> ai_paths_;
 };
 
 #endif // GAMEDATA_H

@@ -7,6 +7,7 @@ class InputManager;
 class GameObject;
 class Engine;
 class GameData;
+class Weapon;
 class ControlsPlayer : public ControlsComponent
 {
     public:
@@ -16,7 +17,7 @@ class ControlsPlayer : public ControlsComponent
                             GameData& game_data) override;
     protected:
     private:
-        const float speed_ = 10;
+        const float speed_ = 400;
         InputManager& input_manager_;
         
 };

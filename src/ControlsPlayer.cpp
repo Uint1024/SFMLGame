@@ -6,15 +6,19 @@
 #include "GameObject.h"
 #include "InputManager.h"
 #include "Engine.h"
+#include "Globals.h"
 #include "GameData.h"
 #include "GameObject.h"
 #include "GraphicsVisible.h"
 #include "PhysicsSolid.h"
 #include "PhysicsBullet.h"
+#include "Weapon.h"
+#include "InventoryComponent.h"
 
 
 ControlsPlayer::ControlsPlayer(InputManager& input_manager) :
-input_manager_(input_manager)
+input_manager_(input_manager),
+ControlsComponent(false)
 {
     //ctor
 }
@@ -39,28 +43,36 @@ ControlsPlayer::Update(GameObject* object, Engine& engine,
     movement_ = sf::Vector2f(0.0f,0.0f);
 
     if(keys_down[kInput_Left]){
-        movement_.x -= speed_;
+        movement_.x -= speed_ * g_delta_time;
     }
 
     if(keys_down[kInput_Right]){
-        movement_.x += speed_;
+        movement_.x += speed_ * g_delta_time;
     }
 
     if(keys_down[kInput_Up]){
-        movement_.y -= speed_;
+        movement_.y -= speed_ * g_delta_time;
     }
 
     if(keys_down[kInput_Down]){
-        movement_.y += speed_;
+        movement_.y += speed_ * g_delta_time;
+    }
+    
+    if(keys_down[kInput_Inventory1]){
+        object->GetInventory()->SetCurrentWeapon(0);
+    }
+    if(keys_down[kInput_Inventory2]){
+        object->GetInventory()->SetCurrentWeapon(1);
     }
 
     sf::Vector2f position = object->getPosition();
-    if(keys_down[kInput_Shoot]){
-        game_data.GetProjectiles().emplace_back(
-                GameObject(object->getPosition(),
-                           sf::Vector2f{10,10},
-                           new PhysicsBullet(input_manager_.GetAngleToMouse(position)),
-                           new GraphicsVisible(kTexture_Ground_Cement), nullptr));
+    if(keys_down[kInput_Shoot] && object->GetInventory()->GetCurrentWeapon()){
+        float angle = input_manager_.GetAngleToMouse(position);
+        std::cout << object->GetInventory()->GetCurrentWeapon() << std::endl;
+        object->GetInventory()->GetCurrentWeapon()
+                                ->Shoot(game_data,
+                                        input_manager_.GetAngleToMouse(position),
+                                        object->getPosition());
     }
     
     for(auto &o : objects_collisions_list_){

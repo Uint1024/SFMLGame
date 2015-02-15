@@ -12,7 +12,7 @@ class PhysicsSolid : public PhysicsComponent
                             GameData& game_data,
                             ControlsComponent* controls,
                             Engine& engine) override;
-        Bbox* CheckCollisionWithBbox();
+        //Bbox* CheckCollisionWithBbox();
     protected:
 
     private:

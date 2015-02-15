@@ -1,12 +1,11 @@
 /* 
- * File:   ArrowMachinegun.cpp
+ * File:   WeaponFireStaff.cpp
  * Author: John
  * 
- * Created on 14 février 2015, 03:07
+ * Created on 14 février 2015, 18:49
  */
 
-#include <iostream>
-#include "ArrowMachinegun.h"
+#include "WeaponFireStaff.h"
 #include "Globals.h"
 
 #include <SFML/System/Vector2.hpp>
@@ -16,20 +15,20 @@
 #include "GameObject.h"
 #include "BulletComponent.h"
 
-ArrowMachinegun::ArrowMachinegun() :
-Weapon(800, 150, 10, sf::Vector2f{30,10}, kTexture_Bullet_Arrow, false){
+
+WeaponFireStaff::WeaponFireStaff() :
+Weapon(800, 1000, 10, sf::Vector2f{30,30}, kTexture_Bullet_FireBall,
+        true){
 }
 
-
-ArrowMachinegun::~ArrowMachinegun() {
+WeaponFireStaff::~WeaponFireStaff() {
 }
 
 void 
-ArrowMachinegun::Shoot(GameData& game_data, const float angle,
+WeaponFireStaff::Shoot(GameData& game_data, const float angle,
                        const sf::Vector2f& position) {
     
     if(CanShoot()){
-        
         last_shot_ = g_game_time;
         bullets -= 1;
         game_data.GetProjectiles().push_back(

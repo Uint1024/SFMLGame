@@ -6,15 +6,16 @@
 class Bbox
 {
     public:
+        Bbox();
         Bbox(const sf::Vector2f& position, const sf::Vector2f& dimensions);
         virtual ~Bbox();
         void Move(const sf::Vector2f& movement);
         void MoveTo(const sf::Vector2f& position);
-        bool CollidesWithBbox(Bbox& other_bbox);
-        bool CheckFutureCollision(  sf::Vector2f movement,
+        bool CheckFutureCollision(  Bbox& future_bbox,
                                     Bbox& other_bbox,
                                     eDirection& direction_of_collision);
-
+        bool CheckIntersect(Bbox& other_bbox);
+        
         inline void SetPosition(const sf::Vector2f& position){
             up_ = position.y;
             left_ = position.x;

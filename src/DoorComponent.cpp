@@ -10,9 +10,8 @@
 
 #include "DoorComponent.h"
 #include "GameObject.h"
+
 DoorComponent::DoorComponent() :
-    time_to_unlock_(1.5),
-    unlock_timer_(0),
     UsableComponent(kObjectState_Locked)
 {
 }
@@ -21,10 +20,15 @@ DoorComponent::~DoorComponent() {
 }
 
 void 
-DoorComponent::Use(GameObject* object) {
-    unlock_timer_ += g_delta_time;
-    if(unlock_timer_ > time_to_unlock_){
-        state_ = kObjectState_Close;
+DoorComponent::Use(GameObject* user, GameObject* used) {
+    if(IsUsed()){
+        state_ = kObjectState_Open;
+        std::cout << "hey lamo" << std::endl;
     }
-    std::cout << unlock_timer_ << std::endl;
+    if(user->GetControls()->GetCanUnlockEveryDoor()){
+        state_ = kObjectState_Open;
+    }else{
+        use_timer_ += g_delta_time;
+        
+    }
 }

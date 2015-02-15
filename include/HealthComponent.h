@@ -8,10 +8,10 @@
 #ifndef HEALTHCOMPONENT_H
 #define	HEALTHCOMPONENT_H
 #include "GameObject.h"
-
+class Weapon;
 class HealthComponent {
 public:
-    HealthComponent();
+    HealthComponent(const int hp);
     HealthComponent(const HealthComponent& orig);
     virtual ~HealthComponent();
     virtual void Update(GameObject* object);
@@ -19,11 +19,14 @@ public:
         hp_ -= damage;
     }
     
+    void GetShot(Weapon* weapon);
     bool IsAlive() const{
         return hp_ > 0;
     }
 private:
     int hp_;
+    bool burning_;
+    float burning_timer_;
     
 };
 

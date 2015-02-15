@@ -9,6 +9,7 @@ sf::Vector2f g_tile_size{64,64};
 float g_delta_time = 0.0f;
 float PI = 3.14;
 int g_game_time = 0;
+int g_minimum_distance_between_objects = 5;
 eGameState g_game_state = kGameState_Playing;
 int main(){
 

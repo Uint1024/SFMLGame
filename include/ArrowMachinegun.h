@@ -9,13 +9,14 @@
 #define	ARROWMACHINEGUN_H
 
 #include "Weapon.h"
-
+#include "GameData.h"
 
 class ArrowMachinegun : public Weapon {
 public:
     ArrowMachinegun();
     virtual ~ArrowMachinegun();
-    void Shoot() override;
+    void Shoot(GameData& game_data, const float angle,
+                       const sf::Vector2f& position) override;
 private:
 
 };

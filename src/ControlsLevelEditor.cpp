@@ -8,7 +8,9 @@
 #include "ControlsLevelEditor.h"
 
 ControlsLevelEditor::ControlsLevelEditor(InputManager& input_manager) :
-    input_manager_(input_manager)
+ControlsComponent(false),
+input_manager_(input_manager)
+
 {
     //ctor
 }
@@ -59,6 +61,9 @@ ControlsLevelEditor::Update(GameObject* object, Engine& engine,
     }
     if(keys_down[kInput_Inventory4]){
         le_selected_object_ = kObject_Door;
+    }
+    if(keys_down[kInput_Inventory5]){
+        le_selected_object_ = kObject_Chest;
     }
 
     if(keys_down[kInput_Shoot]){

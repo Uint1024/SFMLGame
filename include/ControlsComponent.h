@@ -12,7 +12,7 @@ class PhysicsComponent;
 class ControlsComponent
 {
     public:
-        ControlsComponent();
+        ControlsComponent(bool can_unlock_every_door);
         virtual ~ControlsComponent();
         virtual void Update(GameObject* object, Engine& engine,
                             GameData& game_data) = 0;
@@ -28,9 +28,14 @@ class ControlsComponent
         void SetMovement(const sf::Vector2f& movement){
             movement_ = movement;
         }
+        
+        bool GetCanUnlockEveryDoor() const {
+            return can_unlock_every_door_;
+        }
     protected:
         sf::Vector2f movement_;
         std::list<GameObject*> objects_collisions_list_;
+        bool can_unlock_every_door_;
     private:
 
 };

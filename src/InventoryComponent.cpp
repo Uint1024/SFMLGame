@@ -9,7 +9,11 @@
 #include "GameObject.h"
 
 
-InventoryComponent::InventoryComponent(){
+InventoryComponent::InventoryComponent(Weapon* weapon) :
+weapons_{nullptr, nullptr},
+current_weapon_(nullptr)
+{    
+    AddWeapon(weapon);
 }
 
 InventoryComponent::InventoryComponent(const InventoryComponent& orig) {

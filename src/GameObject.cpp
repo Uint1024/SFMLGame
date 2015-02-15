@@ -10,7 +10,21 @@
 #include "HealthComponent.h"
 #include "UseComponent.h"
 #include "InventoryComponent.h"
-
+#include "BulletComponent.h"
+#include "Maths.h"
+ 
+GameObject::GameObject() :
+    physics_(nullptr),
+    graphics_(nullptr),
+    controls_(nullptr),
+    alive_(false),
+    health_(nullptr),
+    messages_list_{},
+    usable_(nullptr),
+    inventory_(nullptr),
+    bullet_(nullptr)
+{
+}
     
 GameObject::GameObject( sf::Vector2f position,
                         sf::Vector2f dimensions,
@@ -19,7 +33,8 @@ GameObject::GameObject( sf::Vector2f position,
                         UsableComponent* usable,
                         ControlsComponent* controls,
                         HealthComponent* health,
-                        InventoryComponent* inventory) :
+                        InventoryComponent* inventory,
+                        BulletComponent* bullet) :
     physics_(physics),
     graphics_(graphics),
     controls_(controls),
@@ -28,8 +43,10 @@ GameObject::GameObject( sf::Vector2f position,
     health_(health),
     messages_list_{},
     usable_(usable),
-    inventory_(inventory)
+    inventory_(inventory),
+    bullet_(bullet)
 {
+    
     MoveTo(position);
 }
 
@@ -43,19 +60,27 @@ GameObject::~GameObject()
 //return false if the object is dead after update
 bool
 GameObject::Update(Engine& engine, GameData& game_data){
+    bool msg_use = false;
     for(auto it = messages_list_.begin() ;
         it != messages_list_.end() ;){
         
         if((*it).message_id == kMsg_Use){
             if(usable_){
-                std::cout << "has message" << std::endl;
-                usable_->Use((*it).sender);
+                usable_->Use((*it).sender, this);
             }
-            it = messages_list_.erase(it); 
-            
-            
-        }else{
+            it = messages_list_.erase(it);
+            msg_use = true;
+        }
+        else{
             ++it;
+        }
+    }
+    
+    //if no use message is sent and the object is a door, it's close automatically
+    //some levers/buttons are also deactivated after a while
+    if(!msg_use){
+        if(usable_ && usable_->GetState() == kObjectState_Open){
+            usable_->SetState(kObjectState_Close);
         }
     }
     if(graphics_){
@@ -74,8 +99,6 @@ GameObject::Update(Engine& engine, GameData& game_data){
         if(health_){
             health_->Update(this);
         }
-        
-        
     }
     if(health_){
         return health_->IsAlive();
@@ -90,6 +113,15 @@ GameObject::Move(const sf::Vector2f& movement){
     move(movement);
     bbox_.Move(movement);
 }
+
+void
+GameObject::Move(const sf::Vector2f& movement, const float angle){
+    this->setRotation(ConvertRadiansToDegrees(angle));
+    //bbox_->rotate();
+    move(movement);
+    bbox_.Move(movement);
+}
+
 
 void
 GameObject::MoveTo(const sf::Vector2f& position){

@@ -16,6 +16,7 @@ class PhysicsComponent
                             GameData& game_data,
                             ControlsComponent* controls,
                             Engine& engine) = 0;
+        //virtual CheckCollision() = 0;
     protected:
 
 

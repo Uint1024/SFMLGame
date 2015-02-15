@@ -9,7 +9,7 @@ class GameData;
 class PhysicsBullet : public PhysicsComponent
 {
     public:
-        PhysicsBullet(const float angle);
+        PhysicsBullet(const float angle, const float speed);
         virtual ~PhysicsBullet();
         virtual bool  Update(GameObject* object,
                              GameData& game_data,
@@ -21,7 +21,6 @@ class PhysicsBullet : public PhysicsComponent
         float distance_travelled_per_tick_;
         float distance_travelled_;
         float max_distance_;
-        float damage_;
         float speed_;
         sf::Vector2f movement_;
         sf::Vector2f velocity_;

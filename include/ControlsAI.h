@@ -14,7 +14,6 @@
 class ControlsAI : public ControlsComponent{
 public:
   ControlsAI();
-  ControlsAI(const ControlsAI& orig);
   virtual ~ControlsAI();
   virtual void Update(GameObject* object, Engine& engine,
                             GameData& game_data);
