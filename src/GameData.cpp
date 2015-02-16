@@ -32,8 +32,8 @@ GameData::GameData(Engine& engine, InputManager& input_manager) :
     input_manager_(input_manager),
     game_state_(kGameState_Editor),
     ground_dirt_model(kTexture_Ground_Dirt),
-    ground_grass_model(kTexture_Ground_Grass)
-    
+    ground_grass_model(kTexture_Ground_Grass),
+    level_editor_window_{sf::Vector2f{10, 10}}
 {
                         
     //comment créer des paths _simples_ pour l'ia
@@ -109,21 +109,30 @@ GameData::GameData(Engine& engine, InputManager& input_manager) :
         }
     }
     
-    steam.close();
+    stream.close();
+    
     stream.open("path0.txt", std::ios::in);
     
     x = 0;
     y = 0;
-    ai_paths_.push_back(std::list<sf::Vector2f>);
+    
+    ai_paths_.push_back(std::vector<sf::Vector2f>());
+    int nb_of_nodes = 0;
+    if(stream.is_open()){
+        stream.get(ch);
+        if(ch >= '0' && ch <= '9'){
+            nb_of_nodes = std::stoi(std::string(&ch));
+        }     
+    }
+    ai_paths_[0].resize(nb_of_nodes);
     while(!stream.eof()){
         stream.get(ch);
-        
-        if(ch == '0'){
-            ai_paths_[0].emplace_back(sf::Vector2f{x * g_tile_size.x, 
-                                                    y * g_tile_size.y});
+
+        if(ch >= '0' && ch <= '9'){
+            ai_paths_[0][std::stoi(std::string(&ch))] = sf::Vector2f{x * g_tile_size.x, 
+                                                    y * g_tile_size.y};
         }
         if(ch == '\n'){
-            std::cout << y << std::endl;
             ++y;
             x = 0;
         }
@@ -133,12 +142,12 @@ GameData::GameData(Engine& engine, InputManager& input_manager) :
     }
     
  
-    wall_map_.emplace_back(GameObject(
+    /*wall_map_.emplace_back(GameObject(
     sf::Vector2f{500,500},
                             g_tile_size,
                             new PhysicsSolid(),
                             new GraphicsVisible(kTexture_Wall_Black),
-                            nullptr));
+                            nullptr));*/
     
 
 }
@@ -214,20 +223,28 @@ GameData::CreateObjectAtMousePosition(const eObjectType type){
     sf::Vector2f grid_pos_pixels{
         static_cast<float>(input_manager_.GetMouseTilePositionInPixels().x),
         static_cast<float>(input_manager_.GetMouseTilePositionInPixels().y)};
-
+    
+    if(type == kObject_Wall || type == kObject_Door || type == kObject_Chest){
+        if(std::find_if(wall_map_.begin(), wall_map_.end(),
+                        [&grid_pos_pixels](GameObject &go){ 
+                            return (go.getPosition().x == grid_pos_pixels.x &&
+                            go.getPosition().y == grid_pos_pixels.y);
+                        }) != wall_map_.end()){
+                            std::cout << wall_map_.size() << std::endl;
+            return;
+        }
+    }
     if(type == kObject_Ground){
         ground_map_[vector_position] = &ground_grass_model;
-    }else if(type == kObject_Wall && 
-        !occupied_solid_map_[vector_position]){
+    }else if(type == kObject_Wall){
                 wall_map_.emplace_back(GameObject(
                             grid_pos_pixels,
                             g_tile_size,
                             new PhysicsSolid(),
                             new GraphicsVisible(kTexture_Wall_Black),
                             nullptr));  
-        occupied_solid_map_[vector_position] = true;
-    }else if (type == kObject_Door &&
-        !occupied_solid_map_[vector_position]) {
+        //occupied_solid_map_[vector_position] = true;
+    }else if (type == kObject_Door) {
         wall_map_.emplace_back(GameObject(
                             grid_pos_pixels,
                             g_tile_size,
@@ -237,9 +254,8 @@ GameData::CreateObjectAtMousePosition(const eObjectType type){
                             ));
                                 
                                           
-        occupied_solid_map_[vector_position] = true;
-    }else if (type == kObject_Chest &&
-        !occupied_solid_map_[vector_position]) {
+        //occupied_solid_map_[vector_position] = true;
+    }else if (type == kObject_Chest) {
         wall_map_.emplace_back(GameObject(
                             grid_pos_pixels,
                             g_tile_size,
@@ -252,7 +268,7 @@ GameData::CreateObjectAtMousePosition(const eObjectType type){
                             ));
                                 
                                           
-        occupied_solid_map_[vector_position] = true;
+        //occupied_solid_map_[vector_position] = true;
     } else if(type == kObject_Guard) {
         npcs_.emplace_back(GameObject(
                 input_manager_.GetMousePositionInWorldInPixels(),

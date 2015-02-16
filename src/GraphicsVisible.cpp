@@ -27,7 +27,4 @@ GraphicsVisible::Update(GameObject* object, Engine& engine)
              object->getPosition().x + object->GetBbox().GetSize().x/2,
              object->getPosition().y + object->GetBbox().GetSize().y/2);
     engine.GetWindow().draw(rect, t);
-    
-    
-    //engine.GetWindow().draw(bbox);
 }

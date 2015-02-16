@@ -9,6 +9,7 @@
 #include "Ground.h"
 #include "Globals.h"
 #include "GameObject.h"
+#include "LevelEditorWindow.h"
 
 
 class Engine;
@@ -57,16 +58,16 @@ class GameData
             return npcs_;
         }
        
-        std::vector<std::list<sf::Vector2f> >& GetAiPaths() const {
+        const std::vector<std::vector<sf::Vector2f>>& GetAiPaths() const {
             return ai_paths_;
         }
-
-
-        inline int GetTotalTiles() const {
+        
+          
+        int GetTotalTiles() const {
             return total_tiles_;
         }
 
-        inline eGameState GetGameState() const {
+        eGameState GetGameState() const {
             return game_state_;
         }
 
@@ -96,7 +97,9 @@ class GameData
         //the map is divided in 2 layers: ground and solid (walls, doors etc.)
         //this variable is the status of each tile (true is solid, false isn't)
         std::vector<bool> occupied_solid_map_;
-        std::vector<std::list<sf::Vector2f>> ai_paths_;
+        std::vector<std::vector<sf::Vector2f>> ai_paths_;
+        LevelEditorWindow level_editor_window_;
+        
 };
 
 #endif // GAMEDATA_H

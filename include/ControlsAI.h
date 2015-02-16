@@ -18,7 +18,13 @@ public:
   virtual void Update(GameObject* object, Engine& engine,
                             GameData& game_data);
 private:
-
+    int path_;
+    int previous_node_;
+    int next_node_;
+    const float speed_ = 30;
+    bool go_in_reverse_;
+    bool angry_;
+    float fov_;
 };
 
 #endif	/* CONTROLSAI_H */
