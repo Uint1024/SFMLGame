@@ -23,7 +23,6 @@ void
 DoorComponent::Use(GameObject* user, GameObject* used) {
     if(IsUsed()){
         state_ = kObjectState_Open;
-        std::cout << "hey lamo" << std::endl;
     }
     if(user->GetControls()->GetCanUnlockEveryDoor()){
         state_ = kObjectState_Open;

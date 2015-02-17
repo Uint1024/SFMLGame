@@ -12,18 +12,20 @@
 #include "Globals.h"
 #include "Bbox.h"
 #include "GameObject.h"
-
+#include "GUI.h"
 
 class Engine;
-//GUI inherits from gameobject????
-class LevelEditorWindow : public GameObject{
+class LevelEditorWindow : public GUI{
 public:
     LevelEditorWindow(const sf::Vector2f& position);
     virtual ~LevelEditorWindow();
-    //TODO: read listeners tutorial
-    //TODO: read GUI tutorial
+    void Render(Engine& engine) override;
+
+    virtual void Update(Engine& engine, InputManager& input_manager) override;
+
 private:
     bool displayed_;
+    bool clicked_on_;
 
 };
 

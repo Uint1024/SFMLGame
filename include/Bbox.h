@@ -15,34 +15,34 @@ class Bbox
                                     Bbox& other_bbox,
                                     eDirection& direction_of_collision);
         bool CheckIntersect(Bbox& other_bbox);
-        
-        inline void SetPosition(const sf::Vector2f& position){
+        bool CheckPointIntersect(sf::Vector2f point);
+        bool CheckPointIntersecti(sf::Vector2i point);
+        void SetPosition(const sf::Vector2f& position){
             up_ = position.y;
             left_ = position.x;
         }
 
-        inline sf::Vector2f GetSize() const{
-            return {(right_ - left_),
-                    (down_ - up_)};
+        sf::Vector2f GetSize() const{
+            return {width_, height_};
         }
 
-        inline sf::Vector2f GetPosition() const{
+        sf::Vector2f GetPosition() const{
             return {left_, up_};
         }
 
-        inline float GetLeft() const{
+        float GetLeft() const{
             return left_;
         }
 
-        inline float GetRight() const{
+        float GetRight() const{
             return right_;
         }
 
-        inline float GetUp() const{
+        float GetUp() const{
             return up_;
         }
 
-        inline float GetDown() const{
+        float GetDown() const{
             return down_;
         }
 

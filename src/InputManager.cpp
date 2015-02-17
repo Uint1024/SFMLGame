@@ -10,7 +10,10 @@
 
 InputManager::InputManager() :
     mouse_position_world_(0.0f,0.0f),
-    le_selected_object_(kObject_Ground)
+    le_selected_object_(kObject_Ground),
+mouse_position_window_(0,0),
+keys_down_{false},
+last_keys_down_{false}
 {
     for(int i = 0 ; i < kInput_Count ; ++i){
         keyboard_mapping_[i] = sf::Keyboard::Unknown;
@@ -44,9 +47,7 @@ InputManager::~InputManager()
 
 int
 InputManager::PollEvents(Engine& engine, GameData& game_data){
-    sf::Vector2i mouse_position_window;
-
-    mouse_position_window = sf::Mouse::getPosition(engine.GetWindow());
+    mouse_position_window_ = sf::Mouse::getPosition(engine.GetWindow());
 
 
     keys_down_[kInput_ZoomIn] = false;
@@ -55,8 +56,9 @@ InputManager::PollEvents(Engine& engine, GameData& game_data){
     sf::Event event;
     sf::RenderWindow& window = engine.GetWindow();
 
-    mouse_position_world_ = window.mapPixelToCoords(mouse_position_window);
-
+    mouse_position_world_ = window.mapPixelToCoords(mouse_position_window_);
+    
+    std::cout << mouse_position_world_.x << " " << mouse_position_window_.x << std::endl;
     mouse_tile_position_in_tiles_ =
             sf::Vector2u{static_cast<unsigned int>
                             (mouse_position_world_.x / g_tile_size.x),
@@ -70,14 +72,20 @@ InputManager::PollEvents(Engine& engine, GameData& game_data){
                             (mouse_tile_position_in_tiles_.y * g_tile_size.y)};
 
     for(int i = 0 ; i < kInput_Count ; ++i){
+        
         if(sf::Keyboard::isKeyPressed(keyboard_mapping_[i]) ||
            sf::Mouse::isButtonPressed(mouse_mapping_[i])){
             keys_down_[i] = true;
+            
         } else {
             keys_down_[i] = false;
         }
     }
+                            
+                            
 
+                            
+                            
     while (window.pollEvent(event))
     {
         switch(event.type) {
@@ -97,14 +105,7 @@ InputManager::PollEvents(Engine& engine, GameData& game_data){
 
     }
 
-
-
-
     GameObject& player = game_data.GetPlayer();
-/*    if(movement.x || movement.y){
-        //engine.MoveCamera(movement);
-        //player.Move(movement);
-    }*/
 
 
     if(keys_down_[kInput_ZoomIn]){
@@ -119,8 +120,8 @@ InputManager::PollEvents(Engine& engine, GameData& game_data){
         game_data.ToggleLevelEditorMode();
     }
 
-
-    /*if(game_data.GetGameState() == kGameState_Editor){
+/*
+    if(game_data.GetGameState() == kGameState_Editor){
         if(keys_down_[kInput_Inventory1]){
             le_selected_object_ = kObject_Ground_Grass;
         }
@@ -138,9 +139,12 @@ InputManager::PollEvents(Engine& engine, GameData& game_data){
     else{
         Play(game_data);
     }*/
-
+                            
+                            
     last_keys_down_ = keys_down_;
-
+    
+    if(!keys_down_[kInput_Up])
+        std::cout << "Up is false " << std::endl;
     return 1;
 }
 

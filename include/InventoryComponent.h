@@ -29,7 +29,6 @@ public:
            return;
         }
         if(!weapons_[1]){
-            std::cout << "heh" << std::endl;
             weapons_[1] = weapon;
             current_weapon_ = weapon;
             return;

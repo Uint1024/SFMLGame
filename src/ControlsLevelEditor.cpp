@@ -23,10 +23,10 @@ ControlsLevelEditor::~ControlsLevelEditor()
 void
 ControlsLevelEditor::Update(GameObject* object, Engine& engine,
                         GameData& game_data){
-    std::array<bool, kInput_Count>& keys_down =
+    const std::array<bool, kInput_Count>& keys_down =
                             input_manager_.GetKeysDown();
 
-    std::array<bool, kInput_Count>& last_keys_down =
+    const std::array<bool, kInput_Count>& last_keys_down =
                             input_manager_.GetLastKeysDown();
 
     sf::Vector2f movement = sf::Vector2f(0.0f,0.0f);

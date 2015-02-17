@@ -31,10 +31,11 @@ ControlsPlayer::~ControlsPlayer()
 void
 ControlsPlayer::Update(GameObject* object, Engine& engine,
                         GameData& game_data){
-    std::array<bool, kInput_Count>& keys_down =
+    //WHAT. THE. FUCK?
+    const std::array<bool, kInput_Count>& keys_down =
                             input_manager_.GetKeysDown();
 
-    std::array<bool, kInput_Count>& last_keys_down =
+    const std::array<bool, kInput_Count>& last_keys_down =
                             input_manager_.GetLastKeysDown();
 
     object->Move(movement_);
@@ -51,6 +52,7 @@ ControlsPlayer::Update(GameObject* object, Engine& engine,
     }
 
     if(keys_down[kInput_Up]){
+        
         movement_.y -= speed_ * g_delta_time;
     }
 
@@ -68,7 +70,6 @@ ControlsPlayer::Update(GameObject* object, Engine& engine,
     sf::Vector2f position = object->getPosition();
     if(keys_down[kInput_Shoot] && object->GetInventory()->GetCurrentWeapon()){
         float angle = input_manager_.GetAngleToMouse(position);
-        std::cout << object->GetInventory()->GetCurrentWeapon() << std::endl;
         object->GetInventory()->GetCurrentWeapon()
                                 ->Shoot(game_data,
                                         input_manager_.GetAngleToMouse(position),

@@ -17,6 +17,18 @@ Bbox::~Bbox()
     //dtor
 }
 
+bool 
+Bbox::CheckPointIntersect(sf::Vector2f point) {
+    return  up_ < point.y && left_ < point.x && 
+            right_ > point.x && down_ > point.y;
+}
+
+bool 
+Bbox::CheckPointIntersecti(sf::Vector2i point) {
+    return  up_ < point.y && left_ < point.x && 
+            right_ > point.x && down_ > point.y;
+}
+
 void
 Bbox::Move(const sf::Vector2f& movement)
 {
@@ -74,7 +86,6 @@ Bbox::CheckFutureCollision(Bbox& future_bbox,
     
     if(current_position == kDirection_Up &&
           future_bbox.down_ + 5 > other_bbox.up_ &&
-          future_bbox.up_  < other_bbox.up_ &&
           future_bbox.right_ > other_bbox.left_ &&
           future_bbox.left_ < other_bbox.right_)
     {
@@ -84,7 +95,6 @@ Bbox::CheckFutureCollision(Bbox& future_bbox,
     }
     else if(current_position == kDirection_Down &&
           future_bbox.up_ - 5 < other_bbox.down_ &&
-          future_bbox.down_ > other_bbox.down_ &&
           future_bbox.right_ > other_bbox.left_ &&
           future_bbox.left_ < other_bbox.right_)
     {
@@ -93,7 +103,6 @@ Bbox::CheckFutureCollision(Bbox& future_bbox,
     }
     else if(current_position == kDirection_Left &&
           future_bbox.right_ + 5 > other_bbox.left_ &&
-          future_bbox.left_ < other_bbox.left_ &&
           future_bbox.down_ > other_bbox.up_ &&
           future_bbox.up_ < other_bbox.down_)
     {
@@ -102,7 +111,6 @@ Bbox::CheckFutureCollision(Bbox& future_bbox,
     }
     else if(current_position == kDirection_Right &&
           future_bbox.left_ - 5 < other_bbox.right_ &&
-          future_bbox.right_ > other_bbox.right_ &&
           future_bbox.down_ > other_bbox.up_ &&
           future_bbox.up_ < other_bbox.down_)
     {

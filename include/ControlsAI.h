@@ -21,10 +21,11 @@ private:
     int path_;
     int previous_node_;
     int next_node_;
-    const float speed_ = 30;
+    const float speed_ = 300;
     bool go_in_reverse_;
     bool angry_;
     float fov_;
+    float havent_seen_player_for_;
 };
 
 #endif	/* CONTROLSAI_H */

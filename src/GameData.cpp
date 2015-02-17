@@ -41,10 +41,6 @@ GameData::GameData(Engine& engine, InputManager& input_manager) :
     //vector de listes de positions
     //chaque ennemi est attribué un ID de path et le suit du début à la fin
     //
-    
-    
-    
-                       
                            
 
     map_size_pixels_ = sf::Vector2u(map_size_tiles_.x * tile_size_.x,
@@ -100,7 +96,6 @@ GameData::GameData(Engine& engine, InputManager& input_manager) :
             player_.GetInventory()->AddWeapon(new ArrowMachinegun());   
         }
         if(ch == '\n'){
-            std::cout << y << std::endl;
             ++y;
             x = 0;
         }
@@ -140,16 +135,6 @@ GameData::GameData(Engine& engine, InputManager& input_manager) :
             ++x;
         }
     }
-    
- 
-    /*wall_map_.emplace_back(GameObject(
-    sf::Vector2f{500,500},
-                            g_tile_size,
-                            new PhysicsSolid(),
-                            new GraphicsVisible(kTexture_Wall_Black),
-                            nullptr));*/
-    
-
 }
 
 GameData::~GameData()
@@ -165,21 +150,18 @@ GameData::PlayerShoots(const float angle_to_mouse){
 
 int
 GameData::Update(){
-    int quit = input_manager_.PollEvents(engine_, *this);
-
     engine_.Clear();
 
-    sf::RectangleShape shape;
-    shape.setSize(sf::Vector2f{g_tile_size.x,
-                  g_tile_size.y});
-
-    if(g_game_state){
-        //engine_
-    }
     engine_.Render(*this);
+    
+    int quit = input_manager_.PollEvents(engine_, *this);
+if(input_manager_.GetKeysDown()[kInput_Up]){
+            std::cout << "Up is true" << std::endl;
+        }
 
 
 
+    
 
     for(auto &o : wall_map_){
         o.Update(engine_, *this);
@@ -213,6 +195,10 @@ GameData::Update(){
         player_.GetControls()->Update(&player_, engine_, *this);
     }
     
+    engine_.GetWindow().setView(engine_.GetWindow().getDefaultView());
+    level_editor_window_.Update(engine_, input_manager_);
+    level_editor_window_.Render(engine_);
+    
     engine_.Display();
     return quit;
 }
@@ -230,7 +216,6 @@ GameData::CreateObjectAtMousePosition(const eObjectType type){
                             return (go.getPosition().x == grid_pos_pixels.x &&
                             go.getPosition().y == grid_pos_pixels.y);
                         }) != wall_map_.end()){
-                            std::cout << wall_map_.size() << std::endl;
             return;
         }
     }

@@ -20,27 +20,31 @@ class InputManager
 
         //Accessors:
 
-        inline std::array<bool, kInput_Count>& GetKeysDown(){
+        const std::array<bool, kInput_Count>& GetKeysDown() const{
             return keys_down_;
-        };
+        }
 
-        inline std::array<bool, kInput_Count>& GetLastKeysDown(){
+        const std::array<bool, kInput_Count>& GetLastKeysDown() const {
             return last_keys_down_;
-        };
+        }
+        
+        const sf::Vector2i& GetMousePositionWindow() const {
+            return mouse_position_window_;
+        }
 
-        inline sf::Vector2f GetMousePositionInWorldInPixels(){
+        const sf::Vector2f& GetMousePositionInWorldInPixels() const{
             return mouse_position_world_;
-        };
+        }
 
-        inline sf::Vector2u GetMouseTilePositionInTiles(){
+        const sf::Vector2u& GetMouseTilePositionInTiles() const{
             return mouse_tile_position_in_tiles_;
-        };
+        }
 
-        inline sf::Vector2u GetMouseTilePositionInPixels(){
+        const sf::Vector2u& GetMouseTilePositionInPixels() const{
             return mouse_tile_position_in_pixels_;
-        };
+        }
 
-        inline int GetMouseVectorMapPosition(const sf::Vector2u map_size) const{
+        int GetMouseVectorMapPosition(const sf::Vector2u map_size) const{
             return mouse_tile_position_in_tiles_.x +
                     mouse_tile_position_in_tiles_.y *
                     map_size.y;
@@ -50,6 +54,7 @@ class InputManager
 
     protected:
     private:
+        sf::Vector2i mouse_position_window_;
         sf::Vector2f mouse_position_world_;
         sf::Vector2u mouse_tile_position_in_tiles_;
         sf::Vector2u mouse_tile_position_in_pixels_;

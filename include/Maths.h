@@ -5,11 +5,11 @@
 
 const float RadianToDegree = 57.295;
 //pythagore
-float DistanceBetween2Points(sf::Vector2f first,
-                             sf::Vector2f second);
-float AngleBetween2Points(sf::Vector2f first,
-                             sf::Vector2f second);
-float PythagorasDistance(sf::Vector2f point);
+float DistanceBetween2Points(const sf::Vector2f& first,
+                             const sf::Vector2f& second);
+float AngleBetween2Points(const sf::Vector2f& first,
+                             const sf::Vector2f& second);
+float PythagorasDistance(const sf::Vector2f& point);
 float ConvertRadiansToDegrees(const float radians);
 
 extern const float PI;
