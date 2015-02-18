@@ -106,7 +106,6 @@ void ControlsAI::Update(GameObject* object,
            distance_raycast += PythagorasDistance(raycast_movement);
            for(auto &wall : walls_map){
                if(wall.GetBbox().CheckPointIntersect(raycasted)){
-                   std::cout << "boom" << std::endl;
                    angry_ = false;
                    distance_raycast = distance_to_player;
                    break;

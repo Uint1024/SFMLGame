@@ -9,17 +9,23 @@
 
 
 InputManager::InputManager() :
-    mouse_position_world_(0.0f,0.0f),
-    le_selected_object_(kObject_Ground),
+
+
 mouse_position_window_(0,0),
+last_mouse_position_window_(0,0),
+mouse_movement_window_{0.0f, 0.0f},
+mouse_position_world_(0.0f,0.0f),
+mouse_tile_position_in_tiles_(0,0),
+mouse_tile_position_in_pixels_(0,0),
+keyboard_mapping_{sf::Keyboard::Unknown},
+mouse_mapping_{sf::Mouse::ButtonCount},
 keys_down_{false},
-last_keys_down_{false}
+last_keys_down_{false},
+le_selected_object_(kObject_Ground)
+//last_mouse_position_window_(0,0)
 {
     for(int i = 0 ; i < kInput_Count ; ++i){
         keyboard_mapping_[i] = sf::Keyboard::Unknown;
-    }
-
-    for(int i = 0 ; i < kInput_Count ; ++i){
         mouse_mapping_[i] = sf::Mouse::ButtonCount;
     }
 
@@ -48,8 +54,11 @@ InputManager::~InputManager()
 int
 InputManager::PollEvents(Engine& engine, GameData& game_data){
     mouse_position_window_ = sf::Mouse::getPosition(engine.GetWindow());
-
-
+    
+    mouse_movement_window_ = 
+    sf::Vector2f{
+    static_cast<float>(mouse_position_window_.x - last_mouse_position_window_.x),
+    static_cast<float>(mouse_position_window_.y - last_mouse_position_window_.y)};
     keys_down_[kInput_ZoomIn] = false;
     keys_down_[kInput_ZoomOut] = false;
 
@@ -58,25 +67,26 @@ InputManager::PollEvents(Engine& engine, GameData& game_data){
 
     mouse_position_world_ = window.mapPixelToCoords(mouse_position_window_);
     
-    std::cout << mouse_position_world_.x << " " << mouse_position_window_.x << std::endl;
     mouse_tile_position_in_tiles_ =
             sf::Vector2u{static_cast<unsigned int>
                             (mouse_position_world_.x / g_tile_size.x),
                          static_cast<unsigned int>
                             (mouse_position_world_.y / g_tile_size.y)};
 
+                           /* std::cout << mouse_tile_position_in_tiles_.x << " " <<
+                                        mouse_tile_position_in_tiles_.y << std::endl;*/
     mouse_tile_position_in_pixels_ =
             sf::Vector2u{static_cast<unsigned int>
                             (mouse_tile_position_in_tiles_.x * g_tile_size.x),
                          static_cast<unsigned int>
                             (mouse_tile_position_in_tiles_.y * g_tile_size.y)};
 
+
     for(int i = 0 ; i < kInput_Count ; ++i){
         
         if(sf::Keyboard::isKeyPressed(keyboard_mapping_[i]) ||
            sf::Mouse::isButtonPressed(mouse_mapping_[i])){
             keys_down_[i] = true;
-            
         } else {
             keys_down_[i] = false;
         }
@@ -84,7 +94,7 @@ InputManager::PollEvents(Engine& engine, GameData& game_data){
                             
                             
 
-                            
+    
                             
     while (window.pollEvent(event))
     {
@@ -142,9 +152,8 @@ InputManager::PollEvents(Engine& engine, GameData& game_data){
                             
                             
     last_keys_down_ = keys_down_;
+    last_mouse_position_window_ = mouse_position_window_;
     
-    if(!keys_down_[kInput_Up])
-        std::cout << "Up is false " << std::endl;
     return 1;
 }
 
@@ -167,3 +176,22 @@ InputManager::GetAngleToMouse(const sf::Vector2f& object_pos)
     return atan2(mouse_position_world_.y - object_pos.y,
               mouse_position_world_.x - object_pos.x);
 }
+
+const std::array<bool, kInput_Count>& 
+InputManager::GetKeysDown(){
+    return keys_down_;
+}
+
+const sf::Vector2f& 
+InputManager::GetMouseMovement() const{
+    return mouse_movement_window_;
+}
+
+const std::array<bool, kInput_Count>& InputManager::GetLastKeysDown() {
+    return last_keys_down_;
+}
+
+const sf::Vector2i& InputManager::GetMousePositionWindow() const {
+    return mouse_position_window_;
+}
+

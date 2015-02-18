@@ -70,6 +70,10 @@ class GameData
         eGameState GetGameState() const {
             return game_state_;
         }
+        
+        LevelEditorWindow& GetLevelEditorWindow() {
+            return level_editor_window_;
+        }
 
     protected:
     private:

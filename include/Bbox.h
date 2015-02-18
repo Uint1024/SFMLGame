@@ -21,6 +21,18 @@ class Bbox
             up_ = position.y;
             left_ = position.x;
         }
+        
+        void SetHeight(const int height){
+            height_ = height;
+            down_ = up_ + height;
+            
+        }
+        
+        void SetWidth(const int width){
+            width_ = width;
+            right_ = left_ + width;
+            
+        }
 
         sf::Vector2f GetSize() const{
             return {width_, height_};

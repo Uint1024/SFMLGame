@@ -9,9 +9,26 @@
 #include "Engine.h"
 #include "InputManager.h"
 
-LevelEditorWindow::LevelEditorWindow(const sf::Vector2f& position) :
-displayed_(true),
+LevelEditorWindow::LevelEditorWindow(const sf::Vector2f& position, 
+                                     Engine& engine) :
+displayed_(false),
+hover_(false),
+clicked_on_(false),
+buttons_{nullptr},
 GUI(position, sf::Vector2f{200, 200}){
+    
+    buttons_[kObject_Wall] = std::make_unique<Button>(kObject_Wall, 0, "Wall", 
+                              this, engine);
+    buttons_[kObject_Guard] =  std::make_unique<Button>(kObject_Guard, 0, 
+                            "Guard", this, engine); 
+    buttons_[kObject_Chest] =  std::make_unique<Button>(kObject_Chest, 0, 
+                            "Chest", this, engine); 
+    buttons_[kObject_Ground] =  std::make_unique<Button>(kObject_Ground, 0, 
+                            "Ground", this, engine); 
+
+    
+                              
+     
 }
 
 LevelEditorWindow::~LevelEditorWindow() {
@@ -19,35 +36,63 @@ LevelEditorWindow::~LevelEditorWindow() {
 
 void 
 LevelEditorWindow::Render(Engine& engine) {
-    sf::RectangleShape rect(bbox_.GetSize());
-    
-    /*sf::Vector2f cam_center = engine.GetCamera().getCenter();
-    sf::Vector2f cam_size = engine.GetCamera().getSize();
-    sf::Vector2f bbox_real_pos = 
-                            { cam_center.x - cam_size.x/2.0f + bbox_.GetLeft(),
-                              cam_center.y - cam_size.y/2.0f + bbox_.GetUp()};*/
-    
-    rect.setFillColor(sf::Color{50, 50, 50});
-   rect.setPosition(bbox_.GetPosition());
-    engine.GetWindow().draw(rect);
+    if(displayed_){
+        sf::RectangleShape rect(bbox_.GetSize());
+
+        rect.setFillColor(sf::Color{50, 50, 50});
+        rect.setPosition(bbox_.GetPosition());
+        engine.GetWindow().draw(rect);
+    }
 }
 
 void 
 LevelEditorWindow::Update(Engine& engine, InputManager& input_manager) {
-    /*if(bbox_.CheckPointIntersecti(input_manager.GetMousePositionWindow()) &&
-       input_manager.GetKeysDown()[kInput_Shoot]){
-        clicked_on_ = true; 
-    }
-    else{
-        clicked_on_ = false;
+    for(int i = 0 ; i < buttons_.size() ; ++i){
+        if(buttons_[i]){
+            int button_height = buttons_[i]->GetLabel().getGlobalBounds().height;
+            buttons_[i]->PlaceInParent(this, 
+                                       sf::Vector2f(10, 10 + button_height * i));
+            buttons_[i]->Update(engine, input_manager);
+        }
     }
     
-    if(clicked_on_){
-        bbox_.SetPosition(
-            sf::Vector2f{
-                static_cast<float>(input_manager.GetMousePositionWindow().x),
-                static_cast<float>(input_manager.GetMousePositionWindow().y)});
-    }*/
+    if(displayed_){
+        if(bbox_.CheckPointIntersect(
+                    sf::Vector2f(input_manager.GetMousePositionWindow().x,
+                                 input_manager.GetMousePositionWindow().y))){
+            hover_ = true; 
+        }
+        else{
+            hover_ = false;
+            clicked_on_ = false;
+        }
+        
+        if(hover_ && input_manager.GetKeysDown()[kInput_Shoot]){
+            clicked_on_ = true;
+        }
+
+        if(clicked_on_ && input_manager.GetKeysDown()[kInput_Shoot]){
+            Move(input_manager.GetMouseMovement());
+        }
+        
+        Render(engine);
+        
+        for(auto &button : buttons_){
+            if(button){
+                button->Update(engine, input_manager);
+            }
+        }
+    }
 }
 
-
+void 
+LevelEditorWindow::Move(const sf::Vector2f& movement) {
+    bbox_.Move(movement);
+    for(int i = 0 ; i < buttons_.size() ; ++i){
+        if(buttons_[i]){
+            int button_height = buttons_[i]->GetLabel().getGlobalBounds().height;
+            buttons_[i]->PlaceInParent(this, 
+                                       sf::Vector2f(10, 10 + button_height * i));
+        }
+    }
+}

@@ -7,19 +7,47 @@
 
 #ifndef BUTTON_H
 #define	BUTTON_H
+#include "GUI.h"
+#include <string>
+#include <SFML/System/String.hpp>
+#include <SFML/Graphics/Text.hpp>
+#include "Bbox.h"
 
-enum eButton{
-    Object
-};
 
-class Button {
+
+class InputManager;
+class Engine;
+class LevelEditorWindow;
+class Button : public GUI{
 public:
-    Button();
+    Button(const int type, const int subtype, const char* label,
+            GUI* parent, Engine& engine);
     virtual ~Button();
+
+    void Update(Engine& engine, InputManager& input_manager);
+
+    virtual void ClickedOnChild(const int type, const int subtype){
+        //can't have children, do nothing
+    }
+
+    void Render(Engine& engine);
+    void PlaceInParent(GUI* parent, const sf::Vector2f& margin);
+    const sf::Text& GetLabel() const{
+        return label_;
+    }
     
+    bool SetSelected(const bool selected) {
+        selected_ = selected;
+    }
+    bool IsSelected() const{
+        return selected_;
+    }
 private:
-    //eButton button_type;
-    int subtype; //object type in case of object button, etc.
+    bool selected_;
+    sf::Text label_;
+    GUI* parent_;
+    int type_;
+    int subtype_;
 };
 
 #endif	/* BUTTON_H */

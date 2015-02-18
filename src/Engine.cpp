@@ -16,6 +16,9 @@ Engine::Engine(const sf::VideoMode video_mode, const char* window_name) :
     objects_colors_[kTexture_Guard] = sf::Color{104,124,19};
     objects_colors_[kTexture_Bullet_Arrow] = sf::Color{128,196,19};
     objects_colors_[kTexture_Bullet_FireBall] = sf::Color{230,20,10};
+    if(!font_.loadFromFile("LiberationSans-Regular.ttf")){
+        std::cout << "Can't load the font!" << std::endl;
+    }
     
 }
 
@@ -75,13 +78,12 @@ Engine::Render(GameData& game_data){
     int x = 0;
     int y = 0;
     for(int i = 0 ; i < total_tiles ; ++i){
-        if(ground[i]){
-            shape.setPosition(sf::Vector2f{x * g_tile_size.x,
-                              y * g_tile_size.y});
+        shape.setPosition(sf::Vector2f{x * g_tile_size.x,
+                          y * g_tile_size.y});
 
-            shape.setFillColor(objects_colors_[ground[i]->GetTextureId()]);
-            window_.draw(shape);
-        }
+        shape.setFillColor(objects_colors_[ground[i]->GetTextureId()]);
+        window_.draw(shape);
+        
         ++x;
         if(x >= game_data.GetMapSizeInTiles().x){
             x = 0;

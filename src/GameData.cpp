@@ -33,7 +33,7 @@ GameData::GameData(Engine& engine, InputManager& input_manager) :
     game_state_(kGameState_Editor),
     ground_dirt_model(kTexture_Ground_Dirt),
     ground_grass_model(kTexture_Ground_Grass),
-    level_editor_window_{sf::Vector2f{10, 10}}
+    level_editor_window_{sf::Vector2f{10, 10}, engine}
 {
                         
     //comment créer des paths _simples_ pour l'ia
@@ -155,13 +155,6 @@ GameData::Update(){
     engine_.Render(*this);
     
     int quit = input_manager_.PollEvents(engine_, *this);
-if(input_manager_.GetKeysDown()[kInput_Up]){
-            std::cout << "Up is true" << std::endl;
-        }
-
-
-
-    
 
     for(auto &o : wall_map_){
         o.Update(engine_, *this);
@@ -197,7 +190,6 @@ if(input_manager_.GetKeysDown()[kInput_Up]){
     
     engine_.GetWindow().setView(engine_.GetWindow().getDefaultView());
     level_editor_window_.Update(engine_, input_manager_);
-    level_editor_window_.Render(engine_);
     
     engine_.Display();
     return quit;
@@ -221,6 +213,7 @@ GameData::CreateObjectAtMousePosition(const eObjectType type){
     }
     if(type == kObject_Ground){
         ground_map_[vector_position] = &ground_grass_model;
+        std::cout << "vector position = " << vector_position << std::endl;
     }else if(type == kObject_Wall){
                 wall_map_.emplace_back(GameObject(
                             grid_pos_pixels,
@@ -271,9 +264,11 @@ void
 GameData::ToggleLevelEditorMode(){
     if(g_game_state == kGameState_Editor){
         g_game_state = kGameState_Playing;
+        level_editor_window_.SetDisplayed(false);
         player_.SetControls(new ControlsPlayer(input_manager_));
     } else {
         g_game_state = kGameState_Editor;
+        level_editor_window_.SetDisplayed(true);
         player_.SetControls(new ControlsLevelEditor(input_manager_));
     }
 }

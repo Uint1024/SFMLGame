@@ -17,9 +17,13 @@ public:
     
     GUI(const sf::Vector2f& position, const sf::Vector2f& size);
     virtual void Render(Engine& engine) = 0;
-    void Move(sf::Vector2f movement);
+    virtual void Move(const sf::Vector2f& movement);
     virtual void Update(Engine& engine, InputManager& input_manager) = 0;
-    
+    virtual void TestFunction();
+    virtual void ClickedOnChild(const int type, const int subtype) = 0;
+    const Bbox& GetBbox() const{
+        return bbox_;
+    }
 protected:
     Bbox bbox_;  
     sf::Vector2f position_;

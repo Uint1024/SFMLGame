@@ -6,6 +6,7 @@
 #include "InputEnum.h"
 #include "InputManager.h"
 #include "ControlsLevelEditor.h"
+#include "LevelEditorWindow.h"
 
 ControlsLevelEditor::ControlsLevelEditor(InputManager& input_manager) :
 ControlsComponent(false),
@@ -25,10 +26,7 @@ ControlsLevelEditor::Update(GameObject* object, Engine& engine,
                         GameData& game_data){
     const std::array<bool, kInput_Count>& keys_down =
                             input_manager_.GetKeysDown();
-
-    const std::array<bool, kInput_Count>& last_keys_down =
-                            input_manager_.GetLastKeysDown();
-
+    
     sf::Vector2f movement = sf::Vector2f(0.0f,0.0f);
 
     if(keys_down[kInput_Left]){
@@ -50,7 +48,7 @@ ControlsLevelEditor::Update(GameObject* object, Engine& engine,
 
     sf::Vector2f position = object->getPosition();
 
-    if(keys_down[kInput_Inventory1]){
+    /*if(keys_down[kInput_Inventory1]){
         le_selected_object_ = kObject_Ground;
     }
     if(keys_down[kInput_Inventory2]){
@@ -64,9 +62,12 @@ ControlsLevelEditor::Update(GameObject* object, Engine& engine,
     }
     if(keys_down[kInput_Inventory5]){
         le_selected_object_ = kObject_Chest;
-    }
+    }*/
+    
+    le_selected_object_ = game_data.GetLevelEditorWindow().GetSelectedObjectType();
 
-    if(keys_down[kInput_Shoot]){
+    if(!game_data.GetLevelEditorWindow().IsHover() && 
+       keys_down[kInput_Shoot]){
         game_data.CreateObjectAtMousePosition(le_selected_object_);
     }
     

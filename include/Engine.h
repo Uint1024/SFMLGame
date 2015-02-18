@@ -2,6 +2,8 @@
 #define ENGINE_H
 #include <SFML/Graphics.hpp>
 #include "GameData.h"
+#include <SFML/Graphics/Font.hpp>
+
 
 class Engine
 {
@@ -34,12 +36,18 @@ class Engine
             return window_.getSize();
         }
         
+        sf::Font& GetFont() {
+            return font_;
+        }
+
+        
         void CenterCameraOnPlayer(sf::Vector2f player_position);
     protected:
     private:
         sf::RenderWindow window_;
         sf::View camera_;
         std::array<sf::Color, kTexture_Count> objects_colors_;
+        sf::Font font_;
 };
 
 #endif // ENGINE_H

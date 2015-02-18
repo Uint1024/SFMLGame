@@ -10,7 +10,7 @@
 PhysicsBullet::PhysicsBullet(const float angle, const float speed) :
     angle_(angle),
     distance_travelled_(0.0f),
-    max_distance_(1200.0f),
+    max_distance_(1000000.0f),
     direction_of_collision_(kDirection_None),
     collisions_in_4_directions_{nullptr},
     nb_of_collisions_in_4_directions_{0},

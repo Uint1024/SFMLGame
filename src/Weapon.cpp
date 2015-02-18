@@ -12,10 +12,10 @@ Weapon::Weapon(int bullet_speed, int shot_delay, int bullet_damage,
                sf::Vector2f bullet_size, eTexture bullet_texture,
                bool burning):
 bullet_speed_(bullet_speed),
-shot_delay_(shot_delay),
+shot_delay_(1),
 last_shot_(0),
 bullet_damage_(bullet_damage),
-bullets(100),
+bullets(100000000),
 bullet_size_(bullet_size),
 bullet_texture_(bullet_texture),
 burning_(burning)

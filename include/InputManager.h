@@ -1,5 +1,6 @@
 #ifndef INPUTMANAGER_H
 #define INPUTMANAGER_H
+#include <iostream>
 #include <array>
 #include <SFML/Graphics.hpp>
 #include <SFML/Window/Keyboard.hpp>
@@ -20,17 +21,12 @@ class InputManager
 
         //Accessors:
 
-        const std::array<bool, kInput_Count>& GetKeysDown() const{
-            return keys_down_;
-        }
+        const std::array<bool, kInput_Count>& GetKeysDown() ;
 
-        const std::array<bool, kInput_Count>& GetLastKeysDown() const {
-            return last_keys_down_;
-        }
+        const std::array<bool, kInput_Count>& GetLastKeysDown();
         
-        const sf::Vector2i& GetMousePositionWindow() const {
-            return mouse_position_window_;
-        }
+        
+        const sf::Vector2i& GetMousePositionWindow() const;
 
         const sf::Vector2f& GetMousePositionInWorldInPixels() const{
             return mouse_position_world_;
@@ -45,16 +41,25 @@ class InputManager
         }
 
         int GetMouseVectorMapPosition(const sf::Vector2u map_size) const{
+            std::cout << mouse_tile_position_in_tiles_.x << 
+                    " " << mouse_tile_position_in_tiles_.y << " " << map_size.x << std::endl;
             return mouse_tile_position_in_tiles_.x +
-                    mouse_tile_position_in_tiles_.y *
-                    map_size.y;
+                    (mouse_tile_position_in_tiles_.y *
+                    map_size.x);
         }
+        
+        const sf::Vector2f& GetMouseMovement() const;
+
 
 
 
     protected:
     private:
+        
+        
         sf::Vector2i mouse_position_window_;
+        sf::Vector2i last_mouse_position_window_;
+        sf::Vector2f mouse_movement_window_;
         sf::Vector2f mouse_position_world_;
         sf::Vector2u mouse_tile_position_in_tiles_;
         sf::Vector2u mouse_tile_position_in_pixels_;
@@ -63,6 +68,7 @@ class InputManager
         std::array<bool, kInput_Count> keys_down_;
         std::array<bool, kInput_Count> last_keys_down_;
         eObjectType le_selected_object_;
+        
 };
 
 #endif // INPUTMANAGER_H

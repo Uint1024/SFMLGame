@@ -41,8 +41,8 @@ Bbox::Move(const sf::Vector2f& movement)
 void
 Bbox::MoveTo(const sf::Vector2f& position)
 {
-    down_ = position.y + (up_ - down_);
-    right_ = position.x + (right_ - left_);
+    down_ = position.y + (height_);
+    right_ = position.x + (width_);
     left_ = position.x;
     up_ = position.y;
 }

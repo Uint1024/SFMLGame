@@ -40,7 +40,7 @@ ControlsPlayer::Update(GameObject* object, Engine& engine,
 
     object->Move(movement_);
     engine.MoveCamera(movement_);
-
+    //input_manager_.WTF();
     movement_ = sf::Vector2f(0.0f,0.0f);
 
     if(keys_down[kInput_Left]){
